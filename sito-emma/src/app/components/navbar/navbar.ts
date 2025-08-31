@@ -30,6 +30,10 @@ export class Navbar implements OnInit{
     this.onMenuVisibilityChange.emit(false);
   }
 
+  goToHomePage(): void {
+      this.router.navigateByUrl('/home');
+  }
+
   goToAboutPage(): void {
     this.router.navigateByUrl('/about');
   }

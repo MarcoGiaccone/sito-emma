@@ -1,0 +1,23 @@
+.about-text-container {
+    height: calc(100vh - 31px);
+    
+}
+
+.about-text-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.about-text {
+    font-weight: 300;
+    width: 65%;
+    margin-bottom: 10px;
+}
+
+.about-text-bars {
+    align-self: flex-end;
+    margin-right: 30px;
+    font-size: 12px;
+}
