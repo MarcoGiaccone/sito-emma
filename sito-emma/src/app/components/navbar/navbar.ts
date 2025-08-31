@@ -9,25 +9,29 @@ import { Router } from '@angular/router';
 })
 export class Navbar implements OnInit{
   @Input() linkDarRenderizzare: string[] = [];
-  @Output() emettiColore = new EventEmitter<string>();
-  currentColor!: string;
+  isMenuVisible: boolean = false;
+  @Output() onMenuVisibilityChange = new EventEmitter<boolean>();
 
   constructor(private router: Router) {
 
   }
 
   ngOnInit(): void {
-    console.log('link', this.linkDarRenderizzare);
+  }
+
+  openMenu(): void {
+    console.log('opening menu');
+    this.isMenuVisible = true;
+    this.onMenuVisibilityChange.emit(true);
+  }
+  
+  closeMenu(): void {
+    this.isMenuVisible = false;
+    this.onMenuVisibilityChange.emit(false);
   }
 
   goToAboutPage(): void {
     this.router.navigateByUrl('/about');
-  }
-
-  cambiaColore(): void {
-    const randomNum = Math.floor(Math.random() * 0xFFFFFF);
-    this.currentColor =  '#' + randomNum.toString(16).padStart(6, '0');
-    this.emettiColore.emit(this.currentColor);
   }
 
 }

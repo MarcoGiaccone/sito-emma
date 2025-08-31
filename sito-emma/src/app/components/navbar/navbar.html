@@ -1,17 +1,34 @@
 <nav>
-    <div class="logo">
-        ///edge
-    </div>
+    @if (!isMenuVisible) {
+        <div class="logo">
+            ///edge
+        </div>
 
-    <div class="hamburger-icon-container">
-        <a href="#">
-            <img class="hamburger-icon" src="icons/hamburger-menu-icon.png" alt="">
-        </a>
-    </div>
-    <!-- <ul class="link-list" >
-        <li><a (click)="goToAboutPage()">about</a></li>
-        <li><a (click)="cambiaColore()">projects</a></li>
-        <li><a href="">shop</a></li>
-    </ul> -->
+        <div class="hamburger-icon-container">
+            <a (click)="openMenu()">
+                <img class="hamburger-icon navbar-icon" src="icons/hamburger-menu-icon.png" alt="">
+            </a>
+        </div>
+    } @else {
+        <div class="menu-cross-container">
+            <a class="navbar-icon" (click)="closeMenu()">
+                <i class="menu-cross fa-solid fa-xmark"></i>
+            </a>
+        </div>
+    }
 </nav>
+
+@if (isMenuVisible) {
+    <div class="menu">
+        <div class="menu-list-container">
+            <ul class="menu-list">
+                <li class="menu-list-item">About</li>
+                <li class="menu-list-item">Projects</li>
+                <li class="menu-list-item">Shop</li>
+                <li class="menu-list-item">LINK</li>
+            </ul>
+        </div>
+    </div>
+}
+
 

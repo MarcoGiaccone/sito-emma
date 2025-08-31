@@ -10,4 +10,9 @@ import { Footer } from "../footer/footer";
 })
 export class Home {
 
+  isMenuVisible: boolean = false;
+  receiveMenuVisibilityStatus(status: boolean): void {
+    this.isMenuVisible = status;
+  }
+
 }

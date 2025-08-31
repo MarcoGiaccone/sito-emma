@@ -23,6 +23,7 @@ nav ul {
 li {
     list-style: none;
     margin: 1rem;
+    font-weight: 300;
 }
 
 a {
@@ -35,4 +36,33 @@ a {
     justify-content: center;
     align-items: center;
     margin-right: 2rem;
+}
+
+.menu-cross-container {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin-right: 2rem;
+}
+
+.menu-cross {
+    font-size: 20px;
+}
+
+.menu {
+    height: calc(100vh - 31px);
+    width: 100vw;
+    background-color: white;
+}
+
+.menu-cross-container {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.menu-list-container {
+    display: flex;
+    align-items: center;
+    height: 80vh;
 }
