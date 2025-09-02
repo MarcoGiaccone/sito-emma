@@ -38,4 +38,8 @@ export class Navbar implements OnInit{
     this.router.navigateByUrl('/about');
   }
 
+  goToProjectsPage(): void {
+    this.router.navigateByUrl('/projects');
+  }
+
 }
