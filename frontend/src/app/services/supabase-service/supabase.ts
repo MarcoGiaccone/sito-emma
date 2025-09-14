@@ -28,4 +28,8 @@ export class Supabase {
     return this.supabase.from('projects').select('*').eq('id', `${projectId}`);
   }
 
+  async getPhotosByProjectId(projectId: number): Promise<any> {
+    return this.supabase.from('photos').select('*').eq('project_id', `${projectId}`)
+  }
+
 }

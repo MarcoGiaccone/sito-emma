@@ -23,16 +23,19 @@ export class MapService {
     return mappedProjects;
   }
 
-  mapPhoto(apiData: any): Photo {
-    return {
-      id: apiData.id,
-      projectId: apiData.project_id,
-      title: apiData.title,
-      description: apiData.description,
-      imageUrl: apiData.image_url,
-      takenAt: apiData.taken_at ? new Date(apiData.taken_at) : undefined,
-      order: apiData.order,
-    };
+  mapPhoto(apiData: any): Photo[] {
+    const mappedPhotos: Photo[] = apiData.map((photo: any) => {
+      return {
+        id: photo.id,
+        projectId: photo.project_id,
+        title: photo.title,
+        description: photo.description,
+        imageUrl: photo.image_url,
+        takenAt: photo.taken_at ? new Date(photo.taken_at) : undefined,
+        order: photo.order,
+      };
+    })
+    return mappedPhotos;
   }
 
   mapCategory(apiData: any): Category {

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Photo } from '../../model/model';
 
 @Component({
   selector: 'app-photo-spotlight',
@@ -7,5 +8,7 @@ import { Component } from '@angular/core';
   styleUrl: './photo-spotlight.css'
 })
 export class PhotoSpotlight {
+
+  @Input() photo!: Photo;
 
 }

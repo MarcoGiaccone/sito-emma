@@ -3,11 +3,13 @@ import { Router } from '@angular/router';
 import { Supabase } from '../../services/supabase-service/supabase';
 import { Navbar } from "../navbar/navbar";
 import { Footer } from "../footer/footer";
-import { Project } from '../../model/model';
+import { Photo, Project } from '../../model/model';
+import { MapService } from '../../services/map-service/map-service';
+import { PhotoSpotlight } from '../photo-spotlight/photo-spotlight';
 
 @Component({
   selector: 'app-project',
-  imports: [Navbar, Footer],
+  imports: [Navbar, Footer, PhotoSpotlight],
   templateUrl: './projectSpotlight.html',
   styleUrl: './projectSpotlight.css'
 })
@@ -15,15 +17,17 @@ export class ProjectSpotlight implements OnInit{
 
   projectId!: number;
   project!: Project;
+  photos!: Photo[];
   constructor(
     private router: Router,
-    private supabase: Supabase
+    private supabase: Supabase,
+    private mapSerivice: MapService
   ) {}
 
   ngOnInit(): void {
     this.getProjectIdFromUrl();
     this.getProject();
-    console.log(this.project);
+    this.getPhotos();
   }
   
   getProjectIdFromUrl(): void {
@@ -35,8 +39,17 @@ export class ProjectSpotlight implements OnInit{
   async getProject(): Promise<void> {
     try {
       const response = await this.supabase.getProjectById(this.projectId);
-      console.log(response);
-      this.project = response.data[0];      
+      this.project = this.mapSerivice.mapProject(response.data)[0];  
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getPhotos(): Promise<void> {
+    try {
+      const response = await this.supabase.getPhotosByProjectId(this.projectId);
+      this.photos = this.mapSerivice.mapPhoto(response.data);
+      console.log(this.photos);
     } catch (error) {
       console.log(error);
     }
