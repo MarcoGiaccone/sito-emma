@@ -10,9 +10,7 @@ export class Supabase {
 
   supabase!: SupabaseClient;
 
-  constructor(
-
-  ) {
+  constructor() {
     const supabaseUrl = environment.supabaseUrl;
     const supabaseKey = environment.supabaseKey;
     this.supabase = createClient(supabaseUrl, supabaseKey);

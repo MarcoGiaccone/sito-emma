@@ -18,9 +18,11 @@
 .project-header {
     font-size: 12px;
     font-weight: 800;
+    text-align: right;
 }
 
 .project-text {
     font-size: 10px;
     font-weight: 300;
+    text-align: right;
 }

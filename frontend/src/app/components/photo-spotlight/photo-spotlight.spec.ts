@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Project } from './project';
+import { PhotoSpotlight } from './photo-spotlight';
 
-describe('Project', () => {
-  let component: Project;
-  let fixture: ComponentFixture<Project>;
+describe('PhotoSpotlight', () => {
+  let component: PhotoSpotlight;
+  let fixture: ComponentFixture<PhotoSpotlight>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Project]
+      imports: [PhotoSpotlight]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(Project);
+    fixture = TestBed.createComponent(PhotoSpotlight);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
