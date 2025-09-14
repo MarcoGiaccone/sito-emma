@@ -17,7 +17,8 @@ export class ProjectThumbnail {
   ) {}
 
   goToProject(): void {
-    console.log('navigating to projects');
+    console.log('navigating to projects', this.project.id);
+    this.router.navigateByUrl(`/projects/${this.project.id}`)
   }
 
 }

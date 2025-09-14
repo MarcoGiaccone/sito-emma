@@ -26,53 +26,8 @@ export class Supabase {
     return this.supabase.from('projects').select('*');
   }
 
-  async createPhoto(photo: Photo): Promise<any> {
-    console.log("creating a photo", photo);
-    const { data, error } = await this.supabase.from('photos')
-      .insert([
-      {
-        id: photo.id ?? Math.ceil(Math.random() * 100000 + 1),
-        project_id: 1,
-        title: photo.title,
-        description: photo.description,
-        image_url: photo.imageUrl,
-        taken_at: photo.takenAt,
-        order: photo.order,
-        created_at: new Date(),
-        updated_at: new Date()
-      }
-      ])
-      .select()
-
-      if (error) {
-        console.log('Error creating photo: ', error);
-        throw error;
-      }
-
-    return data;
-  }
-
-  async createProject(project: Project): Promise<any> {
-    const { data, error } = await this.supabase.from('projects')
-      .insert([
-        {
-          id: project.id ?? Math.ceil(Math.random() * 100000 + 1), // opzionale se vuoi auto-generate
-          user_id: project.userId,
-          title: project.title,
-          description: project.description ?? null,
-          cover_image_url: project.coverImageUrl,
-          created_at: new Date(),
-          updated_at: new Date()
-        }
-      ])
-      .select();
-
-    if (error) {
-      console.error('Error creating project:', error);
-      throw error;
-    }
-
-    return data;
+  async getProjectById(projectId: number): Promise<any> {
+    return this.supabase.from('projects').select('*').eq('id', `${projectId}`);
   }
 
 }
