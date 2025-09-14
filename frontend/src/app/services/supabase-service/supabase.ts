@@ -31,7 +31,7 @@ export class Supabase {
     const { data, error } = await this.supabase.from('photos')
       .insert([
       {
-        id: Math.ceil(Math.random() * 100000 + 1),
+        id: photo.id ?? Math.ceil(Math.random() * 100000 + 1),
         project_id: 1,
         title: photo.title,
         description: photo.description,

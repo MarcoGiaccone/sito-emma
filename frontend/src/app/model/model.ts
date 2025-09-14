@@ -9,7 +9,7 @@ export interface User {
 
 export interface Project {
   id: number;
-  userId: string;
+  userId: number;
   title: string;
   description?: string;
   coverImageUrl: string;

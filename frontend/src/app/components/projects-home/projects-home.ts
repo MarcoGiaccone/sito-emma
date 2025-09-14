@@ -3,7 +3,8 @@ import { Navbar } from "../navbar/navbar";
 import { Footer } from "../footer/footer";
 import { Supabase } from '../../services/supabase-service/supabase';
 import { blankPhoto } from '../../utils/blank-objects';
-import { Photo } from '../../model/model';
+import { Photo, Project } from '../../model/model';
+import { MapService } from '../../services/map-service/map-service';
 
 @Component({
   selector: 'app-projects-home',
@@ -16,25 +17,21 @@ export class ProjectsHome implements OnInit {
   projects!: any;
 
   constructor(
-    private supabase: Supabase
+    private supabase: Supabase,
+    private mapService: MapService
   ) {}
 
   ngOnInit(): void {
-      
-    console.log(this.supabase.client);
     this.getProjects();
-
   }
 
   async getProjects(): Promise<void> {
-    this.projects = await this.supabase.getProjects();
+    try {
+      const response = await this.supabase.getProjects();
+      this.projects = this.mapService.mapProject(response.data);
+    } catch (error) {
+      console.log(error);
+    }
     console.log(this.projects);
-  }
-
-  createPhoto(): void {
-    const photoToPost: Photo = blankPhoto;
-    photoToPost.imageUrl = 'URL IMMAGINE';
-    photoToPost.title = 'TITOLO IMMAGINE';
-    this.supabase.createPhoto(photoToPost);
   }
 }
