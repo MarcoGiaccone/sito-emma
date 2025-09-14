@@ -13,19 +13,13 @@
     <div class="section-2-container">
         <div class="projects-container">
             @for (project of projects; track $index) {
-                <div class="project">
-                    <div class="project-cover-contianer">
-                        <img class="project-cover" src="{{ project.coverImageUrl }}" alt="cover progetto">
-                    </div>
-                    <div class="project-text-contianer">
-                        <div class="project-text-header" >
-                            {{ project.title }}
-                        </div>
-                        <p class="project-text">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, non suscipit incidunt deserunt mollitia pariatur animi soluta a magni. Delectus eveniet incidunt facere ducimus quaerat a corporis, ad quibusdam maiores.
-                        </p>
-                    </div>
-                </div>
+                <app-project-thumbnail
+                [project]="project"
+                ></app-project-thumbnail>
+
+                <app-project-thumbnail
+                [project]="project"
+                ></app-project-thumbnail>
             }
         </div>
     </div>

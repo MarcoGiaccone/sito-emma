@@ -5,16 +5,17 @@ import { Supabase } from '../../services/supabase-service/supabase';
 import { blankPhoto } from '../../utils/blank-objects';
 import { Photo, Project } from '../../model/model';
 import { MapService } from '../../services/map-service/map-service';
+import { ProjectThumbnail } from '../project-thumbnail/project-thumbnail';
 
 @Component({
   selector: 'app-projects-home',
-  imports: [Navbar, Footer],
+  imports: [Navbar, Footer, ProjectThumbnail],
   templateUrl: './projects-home.html',
   styleUrl: './projects-home.css'
 })
 export class ProjectsHome implements OnInit {
 
-  projects!: any;
+  projects!: Project[];
 
   constructor(
     private supabase: Supabase,
