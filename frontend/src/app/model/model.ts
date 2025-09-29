@@ -28,6 +28,8 @@ export interface Photo {
   takenAt?: Date;
   place?: string;
   order?: number; // per ordinare le foto nel progetto
+  photoType?: string; // potenzialmente, per cambiare la visualizzazione di alcune foto
+                      // quando le si guardano all' interno di un progetto (NON ANCORA IMPLEMENTATA)
 }
 
 export interface Category {

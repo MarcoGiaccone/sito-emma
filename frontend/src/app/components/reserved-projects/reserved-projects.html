@@ -1,1 +1,34 @@
-<p>reserved-projects works!</p>
+<div class="wrapper">
+    <div class="main-container">
+        <div class="header-container">
+            <h1 class="header">I tuoi progetti</h1>
+        </div>
+        <div class="list-container">
+            <table class="list" >
+                <thead class="list-header" >
+                    <tr class="header-row">
+                        <th class="header-item">ID</th>
+                        <th class="header-item">Titolo</th>
+                        <th class="header-item">Creato il</th>
+                        <th class="header-item">Descrizione</th>
+                        <th class="header-item">Azioni</th>
+                    </tr>
+                </thead>
+                <tbody class="list-body">
+                    @for (project of projects; track $index) {
+                        <tr class="list-row">
+                            <td class="list-item">{{project.id}}</td>
+                            <td class="list-item">{{project.title}}</td>
+                            <td>{{ project.createdAt | date:'dd/MM/yyyy' }}</td>
+                            <td class="list-item">{{project.description}}</td>
+                            <td class="list-item actions-container">
+                                <i (click)="editProject()" class="action-icon fa-solid fa-pen"></i>
+                                <i (click)="deleteProject()" class="action-icon fa-solid fa-trash"></i>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

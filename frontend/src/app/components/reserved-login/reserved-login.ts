@@ -13,13 +13,13 @@ export class ReservedLogin {
   username!: string;
   password!: string;
   loginErrorMessage!: string;  
+
   constructor(
     private router: Router
   ) {}
 
-  submit() {
+  submit(): void {
     this.loginErrorMessage = '';
-    console.log('submitting data');
     if (
       this.username === 'emma' &&
       this.password === 'genovese'
