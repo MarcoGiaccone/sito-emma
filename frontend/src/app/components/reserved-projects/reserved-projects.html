@@ -1,27 +1,27 @@
-<div class="wrapper">
-    <div class="main-container">
+<div class="d-flex justify-content-center">
+    <div class="card">
         <div class="header-container">
             <h1 class="header">I tuoi progetti</h1>
         </div>
         <div class="list-container">
-            <table class="list" >
-                <thead class="list-header" >
-                    <tr class="header-row">
-                        <th class="header-item">ID</th>
-                        <th class="header-item">Titolo</th>
-                        <th class="header-item">Creato il</th>
-                        <th class="header-item">Descrizione</th>
-                        <th class="header-item">Azioni</th>
+            <table class="table" >
+                <thead class="table-dark" >
+                    <tr class="">
+                        <th>ID</th>
+                        <th>Titolo</th>
+                        <th>Creato il</th>
+                        <th>Descrizione</th>
+                        <th>Azioni</th>
                     </tr>
                 </thead>
-                <tbody class="list-body">
+                <tbody class="">
                     @for (project of projects; track $index) {
-                        <tr class="list-row">
-                            <td class="list-item">{{project.id}}</td>
-                            <td class="list-item">{{project.title}}</td>
-                            <td>{{ project.createdAt | date:'dd/MM/yyyy' }}</td>
-                            <td class="list-item">{{project.description}}</td>
-                            <td class="list-item actions-container">
+                        <tr class="">
+                            <td class="p-3">{{project.id}}</td>
+                            <td class="p-3">{{project.title}}</td>
+                            <td class="p-3">{{ project.createdAt | date:'dd/MM/yyyy' }}</td>
+                            <td class="p-3">{{project.description}}</td>
+                            <td class="p-3">
                                 <i (click)="editProject()" class="action-icon fa-solid fa-pen"></i>
                                 <i (click)="deleteProject()" class="action-icon fa-solid fa-trash"></i>
                             </td>
