@@ -20,7 +20,8 @@ export class ReservedProjectForm implements OnInit {
   photos!: Photo[];
   imageToAdd!: File;
   coverImageChanged: boolean = false;
-  previewUrl!: string;
+  previewUrlFromProject!: string;
+  previewImageFromFiles!: any;
   editMode: boolean = false;
   messageOnSubmit!: string;
 
@@ -69,8 +70,7 @@ export class ReservedProjectForm implements OnInit {
     } catch (error) {
       console.log(error);
     } finally {
-      this.previewUrl = this.supabase.getImagePublicUrl(this.project.coverImageUrl); 
-      console.log(this.previewUrl);
+      this.previewUrlFromProject = this.supabase.getImagePublicUrl(this.project.coverImageUrl); 
     }
   }
 
@@ -116,10 +116,16 @@ export class ReservedProjectForm implements OnInit {
     }
   }
 
+  image!: any;
+
   onImageChange(event: any): void {
-    const file = event.target.files[0];
-    this.imageToAdd = file;
+    this.imageToAdd = event.target.files[0];
     this.coverImageChanged = true;
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.image = reader.result;
+    };
+    reader.readAsDataURL(this.imageToAdd);
   }
 
   async uploadCoverImage(): Promise<void> {
@@ -140,7 +146,10 @@ export class ReservedProjectForm implements OnInit {
       await this.uploadCoverImage();
       await this.createNewProject();
     } else {
-      if (this.coverImageChanged) await this.uploadCoverImage();
+      if (this.coverImageChanged) {
+        await this.uploadCoverImage();
+        // await this.supabase.deleteImage(); //IMPORTANTE!! Bisogna anche eliminare l' immagine vecchia dal bucket
+      } 
       await this.editProject();
     }    
   }

@@ -118,7 +118,6 @@ export class Supabase {
   }
 
   async deleteImage(filepath: string): Promise<void> {
-    console.log(filepath);
     const response = await this.supabase.storage
       .from('image-storage')
       .remove([filepath])

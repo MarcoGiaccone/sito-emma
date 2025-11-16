@@ -24,7 +24,7 @@
                         name="descrizione-progetto"></textarea>
                 </div>
                 <div class="col-12">
-                    <label class="form-label" for="photo-image">Fotografia</label>
+                    <label class="form-label" for="photo-image">Immagine thumbnail progetto</label>
                     <input
                         (change)="onImageChange($event)" 
                         class="form-control"
@@ -33,7 +33,13 @@
                         type="file">
                 </div>
                 <div class="col-12">
-                    <img class="w-100" [src]="previewUrl" alt="preview dell' immagine di copertina del progetto">
+                    @if (image) {
+                        <img class="w-100" [src]="image" alt="preview dell' immagine di copertina del progetto">
+                    } @else if (previewUrlFromProject) {
+                        <img class="w-100" [src]="previewUrlFromProject" alt="preview dell' immagine di copertina del progetto">
+                    } @else {
+                        <p>Nessuna immagine da visualizzare</p>
+                    }
                 </div>
             </div>
 
