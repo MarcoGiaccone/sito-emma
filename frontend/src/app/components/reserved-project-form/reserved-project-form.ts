@@ -24,16 +24,14 @@ export class ReservedProjectForm implements OnInit {
     private supabase: Supabase
   ) {
     const { projectId, editMode }: { projectId: number | null, editMode: boolean } = this.getProjectIdAndModeFromUrl();
+    this.project = emptyProject;
     this.projectId = projectId;
     this.editMode = editMode;
   }
 
   ngOnInit(): void {
-    if (this.editMode) {
-      this.getProjectPhotos(this.project.id);
-      console.log(this.photos);
-    } else {
-      this.project = emptyProject;
+    if (this.projectId) {
+      this.getProject(this.projectId);
     }
   }
 
@@ -48,6 +46,7 @@ export class ReservedProjectForm implements OnInit {
       projectId = null;
     } else {
       projectId = parseInt(lastUrlSegment);
+      editMode = true;
     }
 
     return { projectId, editMode };
@@ -57,9 +56,12 @@ export class ReservedProjectForm implements OnInit {
     console.log(this.project);
   }
 
-  async getProjectPhotos(projectId: number): Promise<void> {
+  async getProject(projectId: number): Promise<void> {
     try {
-      this.photos = await this.supabase.getPhotosByProjectId(projectId);
+      const response = await this.supabase.getProjectById(projectId);
+      if (response.status === 200) {
+        this.project = response.data[0];
+      }
     } catch (error) {
       console.log(error);
     }
