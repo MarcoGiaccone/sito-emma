@@ -21,7 +21,21 @@ export class Supabase {
   }
 
   async getProjects(): Promise<any> {
-    return this.supabase.from('projects').select('*');
+    return this.supabase.from('projects').select('*', { count: 'exact' }).eq('deleted', false);
+  }
+
+  async getNewId(): Promise<number> {
+    let newId: number = 0;
+    try {
+      const response = await this.supabase.from('projects').select('*', { count: 'exact' })
+      if (response.status === 200 && response.count) {
+        newId = response.count + 1;
+      } 
+    } catch (error) {
+      console.log(error);
+    }
+
+    return newId;
   }
 
   async getProjectById(projectId: number): Promise<any> {
@@ -37,7 +51,7 @@ export class Supabase {
       .from('projects')
       .insert([
         {
-          id: 999999,
+          id: project.id,
           title: project.title,
           description: project.description,
           user_id: 10,
@@ -53,7 +67,9 @@ export class Supabase {
   async deleteProject(projectId: number): Promise<any> {
     return this.supabase  
       .from('projects')
-      .delete()
-      .eq('id', 'someValue')
+      .update({ deleted: true })
+      .eq('id', `${projectId}`)
+      .select()
+      
   }
 }

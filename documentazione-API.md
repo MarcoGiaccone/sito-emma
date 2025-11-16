@@ -15,7 +15,7 @@
 3. With pagination
 ```let { data: projects, error } = await supabase
   .from('projects')
-  .select('*')
+  .select('*', { count: 'exact })
   .range(0, 9)
 ```
 

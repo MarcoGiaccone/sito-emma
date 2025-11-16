@@ -33,7 +33,9 @@ export class ReservedProjectForm implements OnInit {
 
   ngOnInit(): void {
     if (this.projectId) {
-      this.getProject(this.projectId);
+      this.getProject(this.projectId);      
+    } else {
+      this.getNewId();
     }
   }
 
@@ -58,6 +60,18 @@ export class ReservedProjectForm implements OnInit {
       const response = await this.supabase.getProjectById(projectId);
       if (response.status === 200) {
         this.project = response.data[0];
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getNewId(): Promise<void> {
+    try {
+      const newId = await this.supabase.getNewId();
+      console.log(newId);
+      if (newId !== 0) {
+        this.project.id = newId;
       }
     } catch (error) {
       console.log(error);

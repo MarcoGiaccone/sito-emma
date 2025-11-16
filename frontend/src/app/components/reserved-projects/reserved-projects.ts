@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 export class ReservedProjects implements OnInit {
 
   projects!: Project[];
+  deleteProjectMessage!: string;
 
   constructor(
     private supabase: Supabase,
@@ -46,7 +47,19 @@ export class ReservedProjects implements OnInit {
     this.router.navigateByUrl('/reserved/projects/create');
   }
 
-  deleteProject(): void {
-    console.log('delting a project');
+  async deleteProject(project: Project): Promise<void> {
+    try {
+      const response = await this.supabase.deleteProject(project.id);
+      if (response.status === 200){
+        this.deleteProjectMessage = 'Eliminazione avvenuta con successo!'
+      } else {
+        this.deleteProjectMessage = 'Eliminazione non riuscita :('
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.getProjects();
+    }
+    
   }
 }

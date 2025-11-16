@@ -23,13 +23,13 @@
                             <td class="p-3">{{project.description}}</td>
                             <td class="p-3">
                                 <i (click)="editProject(project)" class="action-icon fa-solid fa-pen"></i>
-                                <i (click)="deleteProject()" class="action-icon fa-solid fa-trash"></i>
+                                <i (click)="deleteProject(project)" class="action-icon fa-solid fa-trash"></i>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
-            <button class="btn btn-success p-1 m-1" (click)="createNewProject()">Crea un nuovo progetto</button>
+            <button class="btn btn-success p-2 m-3 float-end" (click)="createNewProject()">Crea un nuovo progetto</button>
         </div>
     </div>
 </div>
