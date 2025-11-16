@@ -46,13 +46,21 @@
 ```
 
 5. Insert rows
-```const { data, error } = await supabase
-  .from('projects')
-  .insert([
-    { some_column: 'someValue' },
-    { some_column: 'otherValue' },
-  ])
-  .select()
+```return this.supabase
+    .from('projects')
+    .insert([
+      {
+        id: Math.floor(Math.random() * 4 + 5),
+        title: project.title,
+        description: project.description,
+        user_id: 10,
+        cover_image_url: 'https://picsum.photos/500/701',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        place: 'Butty'
+      }
+    ])
+    .select();
 ```
 
 6. Update rows

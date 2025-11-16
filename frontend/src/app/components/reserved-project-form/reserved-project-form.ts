@@ -19,6 +19,7 @@ export class ReservedProjectForm implements OnInit {
   projectId!: number | null;
   photos!: Photo[];
   editMode: boolean = false;
+  messageOnSubmit!: string;
 
   constructor(
     private router: Router,
@@ -42,7 +43,6 @@ export class ReservedProjectForm implements OnInit {
     let projectId: number | null;
     let editMode: boolean = false;
 
-
     if (lastUrlSegment === 'create') {
       projectId = null;
     } else {
@@ -51,10 +51,6 @@ export class ReservedProjectForm implements OnInit {
     }
 
     return { projectId, editMode };
-  }
-
-  logProgetto(): void {
-    console.log(this.project);
   }
 
   async getProject(projectId: number): Promise<void> {
@@ -68,4 +64,24 @@ export class ReservedProjectForm implements OnInit {
     }
   }
 
+  async submit(): Promise<void> {
+    console.log(this.project);
+
+    if (!this.editMode) {
+      try {
+        const response = await this.supabase.createNewProject(this.project);
+        console.log(response)
+        if (response.status === 200) {
+          this.messageOnSubmit = 'Creazione progetto andata a buon fine'
+        } else {
+          this.messageOnSubmit = 'Creazione progetto non riuscita :('
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.router.navigateByUrl('/reserved/projects');
+      }
+    }
+    
+  }
 }

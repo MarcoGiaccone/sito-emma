@@ -14,7 +14,7 @@
                         id="titolo-progetto" 
                         name="titolo-progetto">
                 </div>
-                <div class="col-4">
+                <div class="col-8">
                     <label for="descrizione-progetto" class="form-label">Descrizione</label>
                     <textarea 
                         [(ngModel)]="project.description"
@@ -30,7 +30,7 @@
             ></app-reserved-photos>
 
             <div class="p-3">
-                <button type="button" (click)="logProgetto()" class="btn btn-success float-end" >submit</button>
+                <button type="button" (click)="submit()" class="btn btn-success float-end" >submit</button>
             </div>
         </form>
     </div>
