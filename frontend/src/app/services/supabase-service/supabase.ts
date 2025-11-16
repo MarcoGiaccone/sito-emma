@@ -21,13 +21,18 @@ export class Supabase {
   }
 
   async getProjects(): Promise<any> {
-    return this.supabase.from('projects').select('*', { count: 'exact' }).eq('deleted', false);
+    return this.supabase
+      .from('projects')
+      .select('*', { count: 'exact' })
+      .eq('deleted', false);
   }
 
   async getNewId(): Promise<number> {
     let newId: number = 0;
     try {
-      const response = await this.supabase.from('projects').select('*', { count: 'exact' })
+      const response = await this.supabase
+        .from('projects')
+        .select('*', { count: 'exact' })
       if (response.status === 200 && response.count) {
         newId = response.count + 1;
       } 
@@ -39,11 +44,17 @@ export class Supabase {
   }
 
   async getProjectById(projectId: number): Promise<any> {
-    return this.supabase.from('projects').select('*').eq('id', `${projectId}`);
+    return this.supabase
+      .from('projects')
+      .select('*')
+      .eq('id', `${projectId}`);
   }
 
   async getPhotosByProjectId(projectId: number): Promise<any> {
-    return this.supabase.from('photos').select('*').eq('project_id', `${projectId}`)
+    return this.supabase
+      .from('photos')
+      .select('*')
+      .eq('project_id', `${projectId}`);
   }
 
   async createNewProject(project: Project): Promise<any> {
@@ -71,5 +82,17 @@ export class Supabase {
       .eq('id', `${projectId}`)
       .select()
       
+  }
+
+  async editProject(project: Project): Promise<any> {
+    return this.supabase
+      .from('projects')
+      .update({ 
+        updated_at: new Date().toISOString(),
+        title: project.title,
+        description: project.description
+      })
+      .eq('id', `${project.id}`)
+      .select()
   }
 }

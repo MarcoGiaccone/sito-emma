@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { Photo, Project } from '../../model/model';
 import { FormsModule } from '@angular/forms';
 import { Supabase } from '../../services/supabase-service/supabase';
-import { empty } from 'rxjs';
 import { emptyProject } from '../../utils/blank-objects';
 import { ReservedPhotos } from "../reserved-photos/reserved-photos";
 
@@ -69,7 +68,6 @@ export class ReservedProjectForm implements OnInit {
   async getNewId(): Promise<void> {
     try {
       const newId = await this.supabase.getNewId();
-      console.log(newId);
       if (newId !== 0) {
         this.project.id = newId;
       }
@@ -78,24 +76,42 @@ export class ReservedProjectForm implements OnInit {
     }
   }
 
-  async submit(): Promise<void> {
-    console.log(this.project);
-
-    if (!this.editMode) {
-      try {
-        const response = await this.supabase.createNewProject(this.project);
-        console.log(response)
-        if (response.status === 200) {
-          this.messageOnSubmit = 'Creazione progetto andata a buon fine'
-        } else {
-          this.messageOnSubmit = 'Creazione progetto non riuscita :('
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        this.router.navigateByUrl('/reserved/projects');
+  async editProject(): Promise<void> {
+    try {
+      const response = await this.supabase.editProject(this.project);
+      if (response.status === 201) {
+        this.messageOnSubmit = 'Modifica avvenuta con successo';
+      } else {
+        this.messageOnSubmit = 'Modifica del progetto non riuscita :(';
       }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.router.navigateByUrl('/reserved/projects');
     }
-    
+  }
+
+  async createNewProject(): Promise<void> {
+    try {
+      const response = await this.supabase.createNewProject(this.project);
+      console.log(response);
+      if (response.status === 201) {
+        this.messageOnSubmit = 'Creazione progetto andata a buon fine';
+      } else {
+        this.messageOnSubmit = 'Creazione progetto non riuscita :(';
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.router.navigateByUrl('/reserved/projects');
+    }
+  }
+
+  submit(): void {
+    if (!this.editMode) {
+      this.createNewProject();
+    } else {
+      this.editProject();
+    }    
   }
 }
