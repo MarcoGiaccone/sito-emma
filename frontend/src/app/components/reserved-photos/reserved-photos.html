@@ -1,1 +1,35 @@
-<p>reserved-photos works!</p>
+<div class="d-flex justify-content-center">
+    <div class="card">
+        <div class="header-container">
+            <h1 class="header">I tuoi progetti</h1>
+        </div>
+        <div class="list-container">
+            <table class="table" >
+                <thead class="table-dark" >
+                    <tr class="">
+                        <th>ID</th>
+                        <th>Titolo</th>
+                        <th>Catturata il</th>
+                        <th>Descrizione</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody class="">
+                    @for (photo of photos; track $index) {
+                        <tr class="">
+                            <td class="p-3">{{ photo.id }}</td>
+                            <td class="p-3">{{ photo.title }}</td>
+                            <td class="p-3">{{ photo.takenAt | date:'dd/MM/yyyy' }}</td>
+                            <td class="p-3">{{ photo.description }}</td>
+                            <td class="p-3">
+                                <i (click)="editPhoto(photo)" class="action-icon fa-solid fa-pen"></i>
+                                <i (click)="deletePhoto()" class="action-icon fa-solid fa-trash"></i>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <button class="btn btn-success p-1 m-1" (click)="addNewPhoto()">Crea un nuovo progetto</button>
+        </div>
+    </div>
+</div>

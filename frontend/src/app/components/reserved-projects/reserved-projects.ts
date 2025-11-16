@@ -39,9 +39,11 @@ export class ReservedProjects implements OnInit {
   }
 
   editProject(project: Project): void {
-    this.router.navigateByUrl(`/reserved/projects/${project.id}`, {
-      state: { project }
-    });
+    this.router.navigateByUrl(`/reserved/projects/${project.id}`);
+  }
+
+  createNewProject(): void {
+    this.router.navigateByUrl('/reserved/projects/create');
   }
 
   deleteProject(): void {

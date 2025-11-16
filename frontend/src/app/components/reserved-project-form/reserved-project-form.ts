@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { Photo, Project } from '../../model/model';
 import { FormsModule } from '@angular/forms';
 import { Supabase } from '../../services/supabase-service/supabase';
+import { empty } from 'rxjs';
+import { emptyProject } from '../../utils/blank-objects';
 
 @Component({
   selector: 'app-reserved-project-form',
@@ -13,22 +15,42 @@ import { Supabase } from '../../services/supabase-service/supabase';
 export class ReservedProjectForm implements OnInit {
 
   project!: Project;
+  projectId!: number | null;
   photos!: Photo[];
+  editMode: boolean = false;
 
   constructor(
     private router: Router,
     private supabase: Supabase
   ) {
-    const stateFromNavigation = this.router.getCurrentNavigation();
-    if (stateFromNavigation?.extras?.state?.['project']) {
-      this.project = stateFromNavigation?.extras?.state?.['project'];
+    const { projectId, editMode }: { projectId: number | null, editMode: boolean } = this.getProjectIdAndModeFromUrl();
+    this.projectId = projectId;
+    this.editMode = editMode;
+  }
+
+  ngOnInit(): void {
+    if (this.editMode) {
+      this.getProjectPhotos(this.project.id);
+      console.log(this.photos);
+    } else {
+      this.project = emptyProject;
     }
   }
 
+  getProjectIdAndModeFromUrl(): { projectId: number | null, editMode: boolean } {
+    const urlSegments = this.router.url.split('/');
+    const lastUrlSegment: string | number = urlSegments[urlSegments.length - 1];
+    let projectId: number | null;
+    let editMode: boolean = false;
 
-  ngOnInit(): void {
-      this.getProjectPhotos(this.project.id);
-      console.log(this.photos);
+
+    if (lastUrlSegment === 'create') {
+      projectId = null;
+    } else {
+      projectId = parseInt(lastUrlSegment);
+    }
+
+    return { projectId, editMode };
   }
 
   logProgetto(): void {
