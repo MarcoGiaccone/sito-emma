@@ -23,6 +23,18 @@
                         id="descrizione-progetto" 
                         name="descrizione-progetto"></textarea>
                 </div>
+                <div class="col-12">
+                    <label class="form-label" for="photo-image">Fotografia</label>
+                    <input
+                        (change)="onImageChange($event)" 
+                        class="form-control"
+                        id="photo-image"
+                        name="photo-image"
+                        type="file">
+                </div>
+                <div class="col-12">
+                    <img class="w-100" [src]="previewUrl" alt="preview dell' immagine di copertina del progetto">
+                </div>
             </div>
 
             <app-reserved-photos

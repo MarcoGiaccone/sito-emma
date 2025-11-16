@@ -66,7 +66,7 @@ export class Supabase {
           title: project.title,
           description: project.description,
           user_id: 10,
-          cover_image_url: 'https://picsum.photos/500/701',
+          cover_image_url: project.coverImageUrl,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
           place: 'Butty'
@@ -94,5 +94,27 @@ export class Supabase {
       })
       .eq('id', `${project.id}`)
       .select()
+  }
+
+  async createCoverImage(file: File): Promise<string> {
+    const filePath = `${Date.now()}_${file.name}`;
+
+    const response = await this.supabase.storage
+      .from('image-storage')
+      .upload(filePath, file);
+
+    console.log(response);
+
+    return filePath
+  }
+
+  getImagePublicUrl(filePath: string): string {
+    let publicUrl: string = '';
+    const response = this.supabase.storage
+      .from('image-storage')
+      .getPublicUrl(filePath);
+    publicUrl = response.data.publicUrl
+    
+    return publicUrl;
   }
 }

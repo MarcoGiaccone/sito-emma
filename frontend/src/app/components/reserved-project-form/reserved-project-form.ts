@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { Supabase } from '../../services/supabase-service/supabase';
 import { emptyProject } from '../../utils/blank-objects';
 import { ReservedPhotos } from "../reserved-photos/reserved-photos";
+import { Storage } from '../../services/storage-service/storage';
+import { MapService } from '../../services/map-service/map-service';
 
 @Component({
   selector: 'app-reserved-project-form',
@@ -17,12 +19,16 @@ export class ReservedProjectForm implements OnInit {
   project!: Project;
   projectId!: number | null;
   photos!: Photo[];
+  imageToAdd!: File;
+  imageUploaded: boolean = false;
+  previewUrl!: string;
   editMode: boolean = false;
   messageOnSubmit!: string;
 
   constructor(
     private router: Router,
-    private supabase: Supabase
+    private supabase: Supabase,
+    private mapService: MapService
   ) {
     const { projectId, editMode }: { projectId: number | null, editMode: boolean } = this.getProjectIdAndModeFromUrl();
     this.project = emptyProject;
@@ -32,7 +38,7 @@ export class ReservedProjectForm implements OnInit {
 
   ngOnInit(): void {
     if (this.projectId) {
-      this.getProject(this.projectId);      
+      this.getProject(this.projectId);  
     } else {
       this.getNewId();
     }
@@ -58,10 +64,14 @@ export class ReservedProjectForm implements OnInit {
     try {
       const response = await this.supabase.getProjectById(projectId);
       if (response.status === 200) {
-        this.project = response.data[0];
+        console.log(response.data[0]);
+        this.project = this.mapService.mapProject(response.data)[0];
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      this.previewUrl = this.supabase.getImagePublicUrl(this.project.coverImageUrl); 
+      console.log(this.previewUrl);
     }
   }
 
@@ -107,11 +117,31 @@ export class ReservedProjectForm implements OnInit {
     }
   }
 
-  submit(): void {
+  onImageChange(event: any): void {
+    const file = event.target.files[0];
+    this.imageToAdd = file;
+    this.imageUploaded = true;
+  }
+
+  async uploadCoverImage(): Promise<void> {
+    let imageUrl!: string;
+    if (this.imageToAdd) {
+      try {
+        imageUrl = await this.supabase.createCoverImage(this.imageToAdd);
+        console.log(imageUrl);
+        if (imageUrl) this.project.coverImageUrl = imageUrl;
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
+  async submit(): Promise<void> {
     if (!this.editMode) {
-      this.createNewProject();
+      await this.uploadCoverImage();
+      await this.createNewProject();
     } else {
-      this.editProject();
+      await this.editProject();
     }    
   }
 }
