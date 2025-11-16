@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { Supabase } from '../../services/supabase-service/supabase';
 import { emptyProject } from '../../utils/blank-objects';
 import { ReservedPhotos } from "../reserved-photos/reserved-photos";
-import { Storage } from '../../services/storage-service/storage';
 import { MapService } from '../../services/map-service/map-service';
 
 @Component({
@@ -20,7 +19,7 @@ export class ReservedProjectForm implements OnInit {
   projectId!: number | null;
   photos!: Photo[];
   imageToAdd!: File;
-  imageUploaded: boolean = false;
+  coverImageChanged: boolean = false;
   previewUrl!: string;
   editMode: boolean = false;
   messageOnSubmit!: string;
@@ -120,7 +119,7 @@ export class ReservedProjectForm implements OnInit {
   onImageChange(event: any): void {
     const file = event.target.files[0];
     this.imageToAdd = file;
-    this.imageUploaded = true;
+    this.coverImageChanged = true;
   }
 
   async uploadCoverImage(): Promise<void> {
@@ -141,6 +140,7 @@ export class ReservedProjectForm implements OnInit {
       await this.uploadCoverImage();
       await this.createNewProject();
     } else {
+      if (this.coverImageChanged) await this.uploadCoverImage();
       await this.editProject();
     }    
   }

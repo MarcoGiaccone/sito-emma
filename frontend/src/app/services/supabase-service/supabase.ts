@@ -90,7 +90,8 @@ export class Supabase {
       .update({ 
         updated_at: new Date().toISOString(),
         title: project.title,
-        description: project.description
+        description: project.description,
+        cover_image_url: project.coverImageUrl
       })
       .eq('id', `${project.id}`)
       .select()
@@ -99,11 +100,9 @@ export class Supabase {
   async createCoverImage(file: File): Promise<string> {
     const filePath = `${Date.now()}_${file.name}`;
 
-    const response = await this.supabase.storage
+    await this.supabase.storage
       .from('image-storage')
       .upload(filePath, file);
-
-    console.log(response);
 
     return filePath
   }
@@ -116,5 +115,50 @@ export class Supabase {
     publicUrl = response.data.publicUrl
     
     return publicUrl;
+  }
+
+  async deleteImage(filepath: string): Promise<void> {
+    console.log(filepath);
+    const response = await this.supabase.storage
+      .from('image-storage')
+      .remove([filepath])
+    
+    if (!response.error) {
+      console.log('Eliminazione dallo storage andato a. buon fine');
+    } 
+  }
+
+  async deleteImageBulk(filepaths: string[]) {
+    const response = await this.supabase.storage
+      .from('image-storage')
+      .remove(filepaths)
+
+      if (!response.error) {
+        console.log('Eliminazione andata a buon fine');
+      }
+  }
+
+  async deleteProjectImages(projectId: number): Promise<void> {
+    let projectPhotos: Photo[] = [];
+    let projectPhotosFilepaths: string[] = [];
+    try {
+      //chiamo tutte le foto del progetto
+      const response = await this.getPhotosByProjectId(projectId);
+      projectPhotos = response.data;
+    } catch (error) {
+      console.log(error);
+    }
+
+    //creo un array di tutti i filepaths delle foto
+    projectPhotosFilepaths = projectPhotos.map(photo => { return photo.imageUrl });
+    
+    //elimino con una delete bulk
+    if (projectPhotosFilepaths.length > 0) {
+      try {
+        await this.deleteImageBulk(projectPhotosFilepaths);      
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }
 }

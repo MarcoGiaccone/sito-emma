@@ -48,6 +48,7 @@ export class ReservedProjects implements OnInit {
   }
 
   async deleteProject(project: Project): Promise<void> {
+    //delete the project
     try {
       const response = await this.supabase.deleteProject(project.id);
       if (response.status === 200){
@@ -60,6 +61,13 @@ export class ReservedProjects implements OnInit {
     } finally {
       this.getProjects();
     }
+
+    // delete project cover
+    await this.supabase.deleteImage(project.coverImageUrl);
+
+    //delete project images
+    await this.supabase.deleteProjectImages(project.id);      
+
     
   }
 }
