@@ -5,6 +5,7 @@ import { ProjectsHome } from './components/projects-home/projects-home';
 import { ProjectSpotlight } from './components/project-spotlight/projectSpotlight';
 import { ReservedLogin } from './components/reserved-login/reserved-login';
 import { ReservedProjects } from './components/reserved-projects/reserved-projects';
+import { ReservedProjectForm } from './components/reserved-project-form/reserved-project-form';
 
 export const routes: Routes = [
     { path: 'home', component: Home },
@@ -13,6 +14,7 @@ export const routes: Routes = [
     { path: 'projects/:id', component: ProjectSpotlight },
     { path: 'reserved', component: ReservedLogin },
     { path: 'reserved/projects', component: ReservedProjects },
+    { path: 'reserved/projects/:id', component: ReservedProjectForm },
     { path: '', component: Home },
   { path: '**', redirectTo: '' } // fallback 404 → Home
 ];

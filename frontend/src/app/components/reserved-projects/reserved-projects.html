@@ -22,7 +22,7 @@
                             <td class="p-3">{{ project.createdAt | date:'dd/MM/yyyy' }}</td>
                             <td class="p-3">{{project.description}}</td>
                             <td class="p-3">
-                                <i (click)="editProject()" class="action-icon fa-solid fa-pen"></i>
+                                <i (click)="editProject(project)" class="action-icon fa-solid fa-pen"></i>
                                 <i (click)="deleteProject()" class="action-icon fa-solid fa-trash"></i>
                             </td>
                         </tr>

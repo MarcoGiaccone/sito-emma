@@ -3,6 +3,7 @@ import { Project } from '../../model/model';
 import { Supabase } from '../../services/supabase-service/supabase';
 import { MapService } from '../../services/map-service/map-service';
 import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -17,7 +18,8 @@ export class ReservedProjects implements OnInit {
 
   constructor(
     private supabase: Supabase,
-    private mapService: MapService
+    private mapService: MapService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -36,8 +38,10 @@ export class ReservedProjects implements OnInit {
     }
   }
 
-  editProject(): void {
-    console.log('editing a project');
+  editProject(project: Project): void {
+    this.router.navigateByUrl(`/reserved/projects/${project.id}`, {
+      state: { project }
+    });
   }
 
   deleteProject(): void {
