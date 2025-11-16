@@ -4,7 +4,7 @@
     </div>
     <div class="card p-3">
         <form>
-            <div class="row g-3">
+            <div class="row g-3 mb-4">
                 <div class="col-4">
                     <label for="titolo-progetto" class="form-label">Titolo</label>
                     <input 
@@ -24,17 +24,13 @@
                         name="descrizione-progetto"></textarea>
                 </div>
             </div>
-            <!-- <div class="row g-3 mt-3">
-                <label for="foto-progetto" class="form-label">Seleziona le foto</label>
-                <input 
-                    id="foto-progetto" 
-                    name="foto-progetto" 
-                    class="form-control col-12" 
-                    type="file">
-            </div> -->
+
+            <app-reserved-photos
+            [projectId]="projectId"
+            ></app-reserved-photos>
 
             <div class="p-3">
-                <button type="button" (click)="logProgetto()" class="btn btn-success" >submit</button>
+                <button type="button" (click)="logProgetto()" class="btn btn-success float-end" >submit</button>
             </div>
         </form>
     </div>

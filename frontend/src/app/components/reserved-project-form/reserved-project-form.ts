@@ -5,10 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { Supabase } from '../../services/supabase-service/supabase';
 import { empty } from 'rxjs';
 import { emptyProject } from '../../utils/blank-objects';
+import { ReservedPhotos } from "../reserved-photos/reserved-photos";
 
 @Component({
   selector: 'app-reserved-project-form',
-  imports: [FormsModule],
+  imports: [FormsModule, ReservedPhotos],
   templateUrl: './reserved-project-form.html',
   styleUrl: './reserved-project-form.css'
 })

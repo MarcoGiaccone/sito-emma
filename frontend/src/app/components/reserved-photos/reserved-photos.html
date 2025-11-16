@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-center">
-    <div class="card">
+    <div class="card  w-100">
         <div class="header-container">
-            <h1 class="header">I tuoi progetti</h1>
+            <h1 class="header">Le foto del progetto</h1>
         </div>
         <div class="list-container">
             <table class="table" >
@@ -15,6 +15,11 @@
                     </tr>
                 </thead>
                 <tbody class="">
+                    @if (photos.length < 1) {
+                        <tr>
+                            <td colspan="100%" class="p-3 text-center">Questo progetto non contiene fotografie</td>
+                        </tr>
+                    }
                     @for (photo of photos; track $index) {
                         <tr class="">
                             <td class="p-3">{{ photo.id }}</td>
@@ -29,7 +34,54 @@
                     }
                 </tbody>
             </table>
-            <button class="btn btn-success p-1 m-1" (click)="addNewPhoto()">Crea un nuovo progetto</button>
+            <div class="container">
+                <button class="btn btn-success p-1 m-1 float-end mb-3" (click)="addNewPhoto()">Aggiungi foto</button>
+            </div>
         </div>
+@if (isPhotoModalOpen) {
+    <div class="card m-3 p-3">
+        <form class="row">
+            <div class="form-group col-4">
+                <label class="form-label" for="titolo-photo">Titolo</label>
+                <input 
+                    [(ngModel)]="photoToAdd.title"
+                    class="form-control" 
+                    type="text" 
+                    id="titolo-photo" 
+                    name="titolo-photo">
+            </div>
+            <div class="form-group col-4">
+                <label class="form-label" for="posto-photo">Posto</label>
+                <input 
+                    [(ngModel)]="photoToAdd.place"
+                    class="form-control" 
+                    type="text" 
+                    id="posto-photo" 
+                    name="posto-photo">
+            </div>
+            <div class="form-group col-4">
+                <label class="form-label" for="categoria-photo">Categoria</label>
+                <textarea 
+                    [(ngModel)]="photoToAdd.description"
+                    class="form-control" 
+                    type="text" 
+                    id="categoria-photo" 
+                    name="categoria-photo"></textarea>
+            </div>
+            <div class="form-group col-12">
+                <label class="form-label" for="photo-image">Fotografia</label>
+                <input
+                    [(ngModel)]="imageToAdd" 
+                    class="form-control"
+                    id="photo-image"
+                    name="photo-image"
+                    type="file">
+            </div>
+        </form>
+        <div class="container mt-3">
+            <button class="btn btn-success float-end" >Aggiungi foto al progetto</button>
+        </div>
+    </div>
+}
     </div>
 </div>
