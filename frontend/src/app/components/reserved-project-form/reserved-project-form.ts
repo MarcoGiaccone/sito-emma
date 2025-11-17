@@ -30,7 +30,7 @@ export class ReservedProjectForm implements OnInit {
     private supabase: Supabase,
     private mapService: MapService
   ) {
-    const { projectId, editMode }: { projectId: number | null, editMode: boolean } = this.getProjectIdAndModeFromUrl();
+    const { projectId, editMode } = this.getProjectIdAndModeFromUrl();
     this.project = emptyProject;
     this.projectId = projectId;
     this.editMode = editMode;
@@ -133,7 +133,6 @@ export class ReservedProjectForm implements OnInit {
     if (this.imageToAdd) {
       try {
         imageUrl = await this.supabase.createCoverImage(this.imageToAdd);
-        console.log(imageUrl);
         if (imageUrl) this.project.coverImageUrl = imageUrl;
       } catch (error) {
         console.log(error);
@@ -141,15 +140,31 @@ export class ReservedProjectForm implements OnInit {
     }
   }
 
+  async deleteCoverImage(imageFilepath: string): Promise<void> {
+    try {
+      await this.supabase.deleteImage(imageFilepath);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async submit(): Promise<void> {
     if (!this.editMode) {
+      //se sono in modalità creazione:
+      //chiamata al bucket per l' upload
       await this.uploadCoverImage();
+      //chiamata per creare il progetto
       await this.createNewProject();
     } else {
+      //se sono in modalità editing
       if (this.coverImageChanged) {
+        //se l' immagine selezionata è cambiata
+        //chiamata al bucket per eliminare la copertina vecchia
+        await this.deleteCoverImage(this.project.coverImageUrl);
+        //chiamata ul bucket per caricare quella nuova 
         await this.uploadCoverImage();
-        // await this.supabase.deleteImage(); //IMPORTANTE!! Bisogna anche eliminare l' immagine vecchia dal bucket
       } 
+      //chiamata di update per il progetto 
       await this.editProject();
     }    
   }
