@@ -116,14 +116,12 @@ export class ReservedProjectForm implements OnInit {
     }
   }
 
-  image!: any;
-
   onImageChange(event: any): void {
     this.imageToAdd = event.target.files[0];
     this.coverImageChanged = true;
     const reader = new FileReader();
     reader.onload = () => {
-      this.image = reader.result;
+      this.previewImageFromFiles = reader.result;
     };
     reader.readAsDataURL(this.imageToAdd);
   }

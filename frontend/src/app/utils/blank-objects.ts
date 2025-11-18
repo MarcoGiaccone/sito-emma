@@ -6,7 +6,7 @@ export const blankPhoto: Photo = {
     title: '',
     description: '',
     imageUrl: '',
-    takenAt: new Date(),
+    takenAt: new Date(0),
     order: 0
 };
 

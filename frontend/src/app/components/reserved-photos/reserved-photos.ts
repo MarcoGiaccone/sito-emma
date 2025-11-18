@@ -15,7 +15,10 @@ export class ReservedPhotos implements OnInit{
 
   photos: Photo[] = [];
   photoToAdd!: Photo;
-  imageToAdd!: string;
+  imageToAdd!: Blob;
+  coverImageChanged: boolean = false;
+  previewUrlFromProject!: string;
+  previewImageFromFiles!: any;
   @Input() projectId!: number | null;
 
   isPhotoModalOpen: boolean = false;
@@ -50,4 +53,29 @@ export class ReservedPhotos implements OnInit{
     this.isPhotoModalOpen = true;
   }
 
+  onImageChange(event: any): void {
+    this.imageToAdd = event.target.files[0];
+    this.coverImageChanged = true;
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.previewImageFromFiles = reader.result;
+    };
+    reader.readAsDataURL(this.imageToAdd);
+  }
+
+  addPhotoToList(): void {
+    //viene generato l' id della foto da aggiungere alla lista
+    this.photoToAdd.id = this.generatePhotoId();
+    this.photos.push(this.photoToAdd);
+    this.isPhotoModalOpen = false;
+  }
+
+  generatePhotoId(): number {
+    const id = new Date().getTime();
+    return id;
+  }
+
+  logFoto(): void {
+    console.log(this.photoToAdd);
+  }
 }
