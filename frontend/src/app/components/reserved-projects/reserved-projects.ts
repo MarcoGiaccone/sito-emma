@@ -47,8 +47,8 @@ export class ReservedProjects implements OnInit {
     this.router.navigateByUrl('/reserved/projects/create');
   }
 
-  addPhotos(project: Project): void {
-    this.router.navigateByUrl(`/reserved/photos/${project.id}`);
+  managePhotos(project: Project): void {
+    this.router.navigateByUrl(`/reserved/projects/${project.id}/photos`);
   }
 
   async deleteProject(project: Project): Promise<void> {

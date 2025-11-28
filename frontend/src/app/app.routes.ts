@@ -16,7 +16,7 @@ export const routes: Routes = [
     { path: 'reserved', component: ReservedLogin },
     { path: 'reserved/projects', component: ReservedProjects },
     { path: 'reserved/projects/:id', component: ReservedProjectForm },
-    { path: 'reserved/photos/:id', component: ReservedPhotos },
+    { path: 'reserved/projects/:id/photos', component: ReservedPhotos },
     { path: '', component: Home },
   { path: '**', redirectTo: '' } // fallback 404 → Home
 ];

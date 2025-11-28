@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-center">
-    <div class="card  w-100">
+    <div class="card w-75">
         <div class="header-container">
-            <h1 class="header ms-4">Le foto del progetto</h1>
+            <h1 class="header ms-4">Le foto del progetto {{projectId}}</h1>
         </div>
         <div class="list-container">
             <table class="table" >
@@ -19,18 +19,19 @@
                         <tr>
                             <td colspan="100%" class="p-3 text-center">Questo progetto non contiene fotografie</td>
                         </tr>
-                    }
-                    @for (photo of photos; track $index) {
-                        <tr class="">
-                            <td class="p-3">{{ photo.id }}</td>
-                            <td class="p-3">{{ photo.title }}</td>
-                            <td class="p-3">{{ photo.takenAt | date:'dd/MM/yyyy' }}</td>
-                            <td class="p-3">{{ photo.description }}</td>
-                            <td class="p-3">
-                                <i (click)="editPhoto(photo)" class="action-icon fa-solid fa-pen"></i>
-                                <i (click)="deletePhoto()" class="action-icon fa-solid fa-trash"></i>
-                            </td>
-                        </tr>
+                    } @else {
+                        @for (photo of photos; track $index) {
+                            <tr class="">
+                                <td class="p-3">{{ photo.id }}</td>
+                                <td class="p-3">{{ photo.title }}</td>
+                                <td class="p-3">{{ photo.takenAt | date:'dd/MM/yyyy' }}</td>
+                                <td class="p-3">{{ photo.description }}</td>
+                                <td class="p-3">
+                                    <i (click)="editPhoto(photo)" class="action-icon fa-solid fa-pen"></i>
+                                    <i (click)="deletePhoto()" class="action-icon fa-solid fa-trash"></i>
+                                </td>
+                            </tr>
+                        }
                     }
                 </tbody>
             </table>
@@ -64,7 +65,12 @@
                     <!-- dropdown per selezionare l' ordine della foto -->
                     <div class="col-3">
                         <label class="form-label" for="order-select">Seleziona l' ordine della foto</label>
-                        <select [(ngModel)]="photoToAdd.order" class="form-control" name="order-select" id="order-select" [required]="true">
+                        <select 
+                            [(ngModel)]="photoToAdd.order" 
+                            class="form-control" 
+                            name="order-select" 
+                            id="order-select" 
+                            [required]="true">
                             <option id="order-1}" [value]="1">{{ 1 }}</option>
                             @if (photos.length > 0) {
                                 @for (photo of photos; track $index; let i = $index) {

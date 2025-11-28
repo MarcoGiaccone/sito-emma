@@ -4,6 +4,7 @@ import { Supabase } from '../../services/supabase-service/supabase';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { blankPhoto } from '../../utils/blank-objects';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reserved-photos',
@@ -16,29 +17,38 @@ export class ReservedPhotos implements OnInit{
   photos: Photo[] = [];
   photoToAdd!: Photo;
   imageToAdd!: Blob;
+  projectId!: number;
   coverImageChanged: boolean = false;
   previewUrlFromProject!: string;
   previewImageFromFiles!: any;
-  @Input() projectId!: number | null;
 
   isPhotoModalOpen: boolean = false;
 
   constructor(
-    private supabase: Supabase
+    private supabase: Supabase,
+    private router: Router
   ) {
     this.photoToAdd = blankPhoto;
   }  
 
   ngOnInit(): void {
-    // assegna alla foto l' id del progetto presa in input
-    if (this.projectId) {
-      this.photoToAdd.projectId = this.projectId
-    }
+    this.projectId = this.getProjectIdFromUrl();
+    this.getProjectPhotos(this.projectId);
+  }
+
+  getProjectIdFromUrl(): number {
+    //estrae l' id del progetto a partire dall' url
+    const urlSegments: string[] = this.router.url.split('/');
+    const lastUrlSegment: string | number = urlSegments[urlSegments.length - 2];
+    let projectId: number | null;
+    projectId = parseInt(lastUrlSegment);
+    return projectId
   }
 
   async getProjectPhotos(projectId: number): Promise<void> {
     try {
-      this.photos = await this.supabase.getPhotosByProjectId(projectId);
+      const response = await this.supabase.getPhotosByProjectId(projectId);
+      this.photos = response.data;
     } catch (error) {
       console.log(error);
     }
