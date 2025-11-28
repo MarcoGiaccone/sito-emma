@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Photo } from '../../model/model';
 import { Supabase } from '../../services/supabase-service/supabase';
 import { DatePipe } from '@angular/common';
@@ -91,10 +91,6 @@ export class ReservedPhotos implements OnInit{
   generatePhotoId(): number {
     const id = new Date().getTime();
     return id;
-  }
-
-  logFoto(): void {
-    console.log(this.photoToAdd);
   }
 
   isFormComplete(photoToAdd: any): boolean {
