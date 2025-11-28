@@ -9,7 +9,7 @@ import { MapService } from '../../services/map-service/map-service';
 
 @Component({
   selector: 'app-reserved-project-form',
-  imports: [FormsModule, ReservedPhotos],
+  imports: [FormsModule],
   templateUrl: './reserved-project-form.html',
   styleUrl: './reserved-project-form.css'
 })
@@ -165,5 +165,9 @@ export class ReservedProjectForm implements OnInit {
       //chiamata di update per il progetto 
       await this.editProject();
     }    
+  }
+
+  receivePhotoList(list: Photo[]): void {
+    console.log('received the list', list);
   }
 }

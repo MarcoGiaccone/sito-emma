@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Photo } from '../../model/model';
 import { Supabase } from '../../services/supabase-service/supabase';
 import { DatePipe } from '@angular/common';
