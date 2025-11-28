@@ -15,21 +15,12 @@ import { Router } from '@angular/router';
 export class ReservedPhotos implements OnInit{
 
   photos: Photo[] = [];
-  photoToAdd!: Photo;
-  imageToAdd!: Blob;
   projectId!: number;
-  coverImageChanged: boolean = false;
-  previewUrlFromProject!: string;
-  previewImageFromFiles!: any;
-
-  isPhotoModalOpen: boolean = false;
 
   constructor(
     private supabase: Supabase,
     private router: Router
-  ) {
-    this.photoToAdd = blankPhoto;
-  }  
+  ) { }  
 
   ngOnInit(): void {
     this.projectId = this.getProjectIdFromUrl();
@@ -63,45 +54,11 @@ export class ReservedPhotos implements OnInit{
   }
 
   addNewPhoto(): void {
-    this.photoToAdd = structuredClone(blankPhoto);
-    this.isPhotoModalOpen = true;
-  }
-
-  closeAddPhotoForm(): void {
-    this.isPhotoModalOpen = false;
-  }
-
-  onImageChange(event: any): void {
-    this.imageToAdd = event.target.files[0];
-    this.coverImageChanged = true;
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.previewImageFromFiles = reader.result;
-    };
-    reader.readAsDataURL(this.imageToAdd);
-  }
-
-  addPhotoToList(): void {
-    //viene generato l' id della foto da aggiungere alla lista
-    this.photoToAdd.id = this.generatePhotoId();
-    this.photos.push(this.photoToAdd);
-    this.isPhotoModalOpen = false;
+    this.router.navigateByUrl(`reserved/projects/7/photos/create`);
   }
 
   generatePhotoId(): number {
     const id = new Date().getTime();
     return id;
-  }
-
-  isFormComplete(photoToAdd: any): boolean {
-    const requiredFields: string[] = ['title', 'takenAt', 'order'];
-    let isFormComplete: boolean = true;
-    requiredFields.forEach(field => {
-      if (!photoToAdd[`${field}`]) {
-        isFormComplete = false;
-      }
-    });
-
-    return isFormComplete;
   }
 }

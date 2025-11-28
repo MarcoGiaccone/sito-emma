@@ -7,6 +7,7 @@ import { ReservedLogin } from './components/reserved-login/reserved-login';
 import { ReservedProjects } from './components/reserved-projects/reserved-projects';
 import { ReservedProjectForm } from './components/reserved-project-form/reserved-project-form';
 import { ReservedPhotos } from './components/reserved-photos/reserved-photos';
+import { ReservedPhotoForm } from './components/reserved-photo-form/reserved-photo-form';
 
 export const routes: Routes = [
     { path: 'home', component: Home },
@@ -17,6 +18,7 @@ export const routes: Routes = [
     { path: 'reserved/projects', component: ReservedProjects },
     { path: 'reserved/projects/:id', component: ReservedProjectForm },
     { path: 'reserved/projects/:id/photos', component: ReservedPhotos },
+    { path: 'reserved/projects/:id/photos/:photoId', component: ReservedPhotoForm },
     { path: '', component: Home },
   { path: '**', redirectTo: '' } // fallback 404 → Home
 ];

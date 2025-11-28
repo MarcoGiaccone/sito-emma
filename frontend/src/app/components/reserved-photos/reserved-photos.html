@@ -36,85 +36,8 @@
                 </tbody>
             </table>
             <div class="container">
-                @if (!isPhotoModalOpen) {
-                    <button class="btn btn-success p-1 m-1 float-end mb-3" (click)="addNewPhoto()">Aggiungi foto</button>
-                }
+                <button class="btn btn-success p-1 m-1 float-end mb-3" (click)="addNewPhoto()">Aggiungi foto</button>
             </div>
         </div>
-        @if (isPhotoModalOpen) {
-            <div class="card m-3 p-3">
-                <form class="row g-3 mb-4">
-                    <div class="form-group col-3">
-                        <label class="form-label" for="titolo-photo">Titolo</label>
-                        <input 
-                            [(ngModel)]="photoToAdd.title"
-                            class="form-control" 
-                            type="text" 
-                            id="titolo-photo" 
-                            name="titolo-photo">
-                    </div>
-                    <div class="form-group col-3">
-                        <label class="form-label" for="posto-photo">Scattata il</label>
-                        <input 
-                            [(ngModel)]="photoToAdd.takenAt"
-                            class="form-control" 
-                            type="date" 
-                            id="posto-photo" 
-                            name="posto-photo">
-                    </div>
-                    <!-- dropdown per selezionare l' ordine della foto -->
-                    <div class="col-3">
-                        <label class="form-label" for="order-select">Seleziona l' ordine della foto</label>
-                        <select 
-                            [(ngModel)]="photoToAdd.order" 
-                            class="form-control" 
-                            name="order-select" 
-                            id="order-select" 
-                            [required]="true">
-                            <option id="order-1}" [value]="1">{{ 1 }}</option>
-                            @if (photos.length > 0) {
-                                @for (photo of photos; track $index; let i = $index) {
-                                    <option id="order-{{i}}" [value]="i + 2">{{ i + 2 }}</option>
-                                }
-                            }          
-                        </select>
-                    </div>
-                    <div class="form-group col-3">
-                        <label class="form-label" for="categoria-photo">Descrizione</label>
-                        <textarea 
-                            [(ngModel)]="photoToAdd.description"
-                            [required]="true"
-                            class="form-control" 
-                            type="text" 
-                            id="categoria-photo" 
-                            name="categoria-photo"></textarea>
-                    </div>
-                    <div class="form-group col-12">
-                        <label class="form-label" for="photo-image">Fotografia</label>
-                        <input
-                            (change)="onImageChange($event)"
-                            class="form-control"
-                            id="photo-image"
-                            name="photo-image"
-                            type="file">
-                    </div>
-                    <div class="col-12">
-                        @if (previewImageFromFiles) {
-                            <img class="w-100" [src]="previewImageFromFiles" alt="preview dell' immagine di copertina del progetto">
-                        } @else if (previewUrlFromProject) {
-                            <img class="w-100" [src]="previewUrlFromProject" alt="preview dell' immagine di copertina del progetto">
-                        } @else {
-                            <p>Nessuna immagine da visualizzare</p>
-                        }
-                    </div>
-                </form>
-                <div class="container mt-3">
-                    <div class="float-end">
-                        <button type="button" class="btn btn-danger me-2" (click)="closeAddPhotoForm()">Chiudi</button>
-                        <button type="submit" class="btn btn-success" (click)="addPhotoToList()" [disabled]="!isFormComplete(this.photoToAdd)">Aggiungi foto al progetto</button>
-                    </div>
-                </div>
-            </div>
-        }
     </div>
 </div>
