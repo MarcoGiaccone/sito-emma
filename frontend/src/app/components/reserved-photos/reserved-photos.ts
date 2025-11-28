@@ -30,7 +30,10 @@ export class ReservedPhotos implements OnInit{
   }  
 
   ngOnInit(): void {
-      console.log('hello dalla lista delle foto');
+    // assegna alla foto l' id del progetto presa in input
+    if (this.projectId) {
+      this.photoToAdd.projectId = this.projectId
+    }
   }
 
   async getProjectPhotos(projectId: number): Promise<void> {
@@ -50,7 +53,12 @@ export class ReservedPhotos implements OnInit{
   }
 
   addNewPhoto(): void {
+    this.photoToAdd = structuredClone(blankPhoto);
     this.isPhotoModalOpen = true;
+  }
+
+  closeAddPhotoForm(): void {
+    this.isPhotoModalOpen = false;
   }
 
   onImageChange(event: any): void {
@@ -77,5 +85,17 @@ export class ReservedPhotos implements OnInit{
 
   logFoto(): void {
     console.log(this.photoToAdd);
+  }
+
+  isFormComplete(photoToAdd: any): boolean {
+    const requiredFields: string[] = ['title', 'takenAt', 'order'];
+    let isFormComplete: boolean = true;
+    requiredFields.forEach(field => {
+      if (!photoToAdd[`${field}`]) {
+        isFormComplete = false;
+      }
+    });
+
+    return isFormComplete;
   }
 }
