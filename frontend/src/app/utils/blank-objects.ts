@@ -7,7 +7,8 @@ export const blankPhoto: Photo = {
     description: '',
     imageUrl: '',
     takenAt: undefined,
-    order: undefined
+    order: undefined,
+    deleted: false
 };
 
 export const emptyProject: Project = {

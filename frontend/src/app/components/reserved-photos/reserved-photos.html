@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center">
-    <div class="card w-75">
+    <div class="card w-75 m-3 p-3">
         <div class="header-container">
             <h1 class="header ms-4">Le foto del progetto {{projectId}}</h1>
         </div>
@@ -11,6 +11,7 @@
                         <th class="ml-5">Titolo</th>
                         <th class="ml-5">Catturata il</th>
                         <th class="ml-5">Descrizione</th>
+                        <th class="ml-5">Ordine</th>
                         <th class="ml-5">Azioni</th>
                     </tr>
                 </thead>
@@ -26,6 +27,7 @@
                                 <td class="p-3">{{ photo.title }}</td>
                                 <td class="p-3">{{ photo.takenAt | date:'dd/MM/yyyy' }}</td>
                                 <td class="p-3">{{ photo.description }}</td>
+                                <td class="p-3">{{ photo.order }}</td>
                                 <td class="p-3">
                                     <i (click)="editPhoto(photo)" class="action-icon fa-solid fa-pen"></i>
                                     <i (click)="deletePhoto()" class="action-icon fa-solid fa-trash"></i>

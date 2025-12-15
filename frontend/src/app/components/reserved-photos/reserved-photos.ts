@@ -5,6 +5,7 @@ import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { blankPhoto } from '../../utils/blank-objects';
 import { Router } from '@angular/router';
+import { MapService } from '../../services/map-service/map-service';
 
 @Component({
   selector: 'app-reserved-photos',
@@ -19,7 +20,8 @@ export class ReservedPhotos implements OnInit{
 
   constructor(
     private supabase: Supabase,
-    private router: Router
+    private router: Router,
+    private mapService: MapService
   ) { }  
 
   ngOnInit(): void {
@@ -39,7 +41,7 @@ export class ReservedPhotos implements OnInit{
   async getProjectPhotos(projectId: number): Promise<void> {
     try {
       const response = await this.supabase.getPhotosByProjectId(projectId);
-      this.photos = response.data;
+      this.photos = this.mapService.mapPhoto(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -54,7 +56,7 @@ export class ReservedPhotos implements OnInit{
   }
 
   addNewPhoto(): void {
-    this.router.navigateByUrl(`reserved/projects/7/photos/create`);
+    this.router.navigateByUrl(`reserved/projects/${this.projectId}/photos/create`);
   }
 
   generatePhotoId(): number {

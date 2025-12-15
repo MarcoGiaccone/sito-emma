@@ -31,7 +31,7 @@ export class ReservedProjectForm implements OnInit {
     private mapService: MapService
   ) {
     const { projectId, editMode } = this.getProjectIdAndModeFromUrl();
-    this.project = emptyProject;
+    this.project = structuredClone(emptyProject);
     this.projectId = projectId;
     this.editMode = editMode;
   }
@@ -75,13 +75,9 @@ export class ReservedProjectForm implements OnInit {
   }
 
   async getNewId(): Promise<void> {
-    try {
-      const newId = await this.supabase.getNewId();
-      if (newId !== 0) {
-        this.project.id = newId;
-      }
-    } catch (error) {
-      console.log(error);
+    const newId = await this.supabase.getNewProjectId();
+    if (newId !== 0) {
+      this.project.id = newId;
     }
   }
 
@@ -130,7 +126,7 @@ export class ReservedProjectForm implements OnInit {
     let imageUrl!: string;
     if (this.imageToAdd) {
       try {
-        imageUrl = await this.supabase.createCoverImage(this.imageToAdd);
+        imageUrl = await this.supabase.createImage(this.imageToAdd);
         if (imageUrl) this.project.coverImageUrl = imageUrl;
       } catch (error) {
         console.log(error);

@@ -33,6 +33,9 @@ export class MapService {
         imageUrl: photo.image_url,
         takenAt: photo.taken_at ? new Date(photo.taken_at) : undefined,
         order: photo.order,
+        createdAt: new Date(photo.created_at),
+        updatedAt: new Date(photo.updated_at),
+        deleted: photo.deleted
       };
     })
     return mappedPhotos;

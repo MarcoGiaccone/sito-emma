@@ -27,7 +27,7 @@ export class Supabase {
       .eq('deleted', false);
   }
 
-  async getNewId(): Promise<number> {
+  async getNewProjectId(): Promise<number> {
     let newId: number = 0;
     try {
       const response = await this.supabase
@@ -54,7 +54,8 @@ export class Supabase {
     return this.supabase
       .from('photos')
       .select('*')
-      .eq('project_id', `${projectId}`);
+      .eq('project_id', `${projectId}`)
+      .eq('deleted', false);
   }
 
   async createNewProject(project: Project): Promise<any> {
@@ -80,8 +81,7 @@ export class Supabase {
       .from('projects')
       .update({ deleted: true })
       .eq('id', `${projectId}`)
-      .select()
-      
+      .select()  
   }
 
   async editProject(project: Project): Promise<any> {
@@ -97,7 +97,7 @@ export class Supabase {
       .select()
   }
 
-  async createCoverImage(file: File): Promise<string> {
+  async createImage(file: File): Promise<string> {
     const filePath = `${Date.now()}_${file.name}`;
 
     await this.supabase.storage
@@ -159,5 +159,52 @@ export class Supabase {
         console.log(error);
       }
     }
+  }
+
+  async getNewPhotoId(): Promise<number> {
+    console.log('getting a new id');
+    let newId: number | null = 0;
+    try {
+      const response = await this.supabase
+        .from('photos')
+        .select('*', { count: 'exact' })
+      if (response.status === 200 && response.count) {
+        console.log('qui')
+        newId = response.count + 1;
+      }
+      console.log(response.status, response.count);
+    } catch (error) {
+      console.log(error);
+    }
+    console.log(newId);
+    return newId;
+  }
+
+  async createNewPhoto(photo: Photo, projectId: number): Promise<any> {
+    const now = new Date().toISOString();
+    console.log(photo, projectId);
+    return this.supabase
+      .from('photos')
+      .insert([
+        {
+          id: photo.id,
+          project_id: projectId,
+          title: photo.title,
+          description: photo.description,
+          image_url: photo.imageUrl,
+          taken_at: photo.takenAt,
+          order: photo.order,
+          created_at: now,
+          updated_at: now
+        }
+      ])
+      .select();
+  }
+
+  async getPhotoById(photoId: number): Promise<any> {
+    return this.supabase 
+      .from('photos')
+      .select('*')
+      .eq('id', `${photoId}`)
   }
 }

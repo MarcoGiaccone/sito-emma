@@ -3,6 +3,8 @@ import { blankPhoto } from '../../utils/blank-objects';
 import { Photo } from '../../model/model';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Supabase } from '../../services/supabase-service/supabase';
+import { MapService } from '../../services/map-service/map-service';
 
 @Component({
   selector: 'app-reserved-photo-form',
@@ -12,36 +14,32 @@ import { Router } from '@angular/router';
 })
 export class ReservedPhotoForm implements OnInit {
 
-  photoToAdd: Photo = structuredClone(blankPhoto);
-  imageToAdd!: Blob;
+  photo: Photo = structuredClone(blankPhoto);
+  imageToAdd!: File;
   projectId!: number;
   photoId!: number | null;
   editMode: boolean = false;
-  coverImageChanged: boolean = false;
+  photoImageChanged: boolean = false;
   previewUrlFromProject!: string;
   previewImageFromFiles!: any;
 
   constructor(
-    private router: Router
-  ) {}
-
-  ngOnInit(): void {
-      this.projectId = this.getProjectIdFromUrl();
-      console.log(this.projectId);
-      const { photoId , editMode } = this.getPhotoIdAndModeFromUrl();
-      this.photoId = photoId;
-      this.editMode = editMode;
-
-      console.log(this.photoId, this.editMode);
+    private router: Router,
+    private supabase: Supabase,
+    private mapService: MapService
+  ) {
+    const { photoId , editMode } = this.getPhotoIdAndModeFromUrl();
+    this.photo.projectId = this.getProjectIdFromUrl();
+    this.photoId = photoId;
+    this.editMode = editMode;
   }
 
-  getProjectIdFromUrl(): number {
-    //estrae l' id del progetto a partire dall' url
-    const urlSegments: string[] = this.router.url.split('/');
-    const projectUrlSegment: string | number = urlSegments[urlSegments.length - 3];
-    let projectId: number | null;
-    projectId = parseInt(projectUrlSegment);
-    return projectId
+  ngOnInit(): void {
+    if (this.photoId) {
+      this.getPhoto(this.photoId);
+    } else {
+      this.getNewId();
+    }
   }
 
   getPhotoIdAndModeFromUrl(): {
@@ -63,9 +61,37 @@ export class ReservedPhotoForm implements OnInit {
     return { photoId, editMode }
   }
 
+  getProjectIdFromUrl(): number {
+    //estrae l' id del progetto a partire dall' url
+    const urlSegments: string[] = this.router.url.split('/');
+    const projectUrlSegment: string | number = urlSegments[urlSegments.length - 3];
+    let projectId: number | null;
+    projectId = parseInt(projectUrlSegment);
+    return projectId
+  }
+
+  async getNewId(): Promise<void> {
+    const newId: number = await this.supabase.getNewPhotoId();
+    if (newId !== 0) {
+      this.photo.id = newId;
+    }
+  }
+
+  async getPhoto(projectId: number): Promise<void> {
+    try {
+      const response = await this.supabase.getPhotoById(projectId);
+      if (response.status === 200) {
+        console.log(response.data[0]);
+        this.photo = this.mapService.mapPhoto(response.data)[0];
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   onImageChange(event: any): void {
     this.imageToAdd = event.target.files[0];
-    this.coverImageChanged = true;
+    this.photoImageChanged = true;
     const reader = new FileReader();
     reader.onload = () => {
       this.previewImageFromFiles = reader.result;
@@ -85,7 +111,45 @@ export class ReservedPhotoForm implements OnInit {
     return isFormComplete;
   }
 
+  async uploadPhotoImage(): Promise<void> {
+    let imageUrl!: string;
+    if (this.imageToAdd) {
+      try {
+        imageUrl = await this.supabase.createImage(this.imageToAdd);
+        if (imageUrl) this.photo.imageUrl = imageUrl;
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
+  async createNewPhoto(): Promise<void> {
+    const { response, error } = await this.supabase.createNewPhoto(this.photo, this.photo.projectId);
+    console.log(response, error);
+  }
+
+  async deletePhotoImage(): Promise<void> {
+
+  }
+
+  async editPhoto(): Promise<void> {
+
+  }
+
   async submit(): Promise<void> {
-    console.log('submitting data content');
+    console.log('submitting data content', this.photo);
+    if (!this.editMode) {
+      await this.uploadPhotoImage();
+      console.log('submitting data content', this.photo);
+      await this.createNewPhoto();
+    } else {
+      if (this.photoImageChanged) {
+        await this.deletePhotoImage();
+        await this.uploadPhotoImage();
+      }
+      await this.editPhoto();
+    }
+
+    this.router.navigateByUrl(`/reserved/projects/${this.photo.projectId}/photos`);
   }
 }
