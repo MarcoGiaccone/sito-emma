@@ -51,8 +51,17 @@ export class ReservedPhotos implements OnInit{
 
   }
 
-  deletePhoto(): void {
-
+  async deletePhoto(photo: Photo): Promise<void> {
+    //cancellazione logica dei metadati
+    try {
+      await this.supabase.deletePhoto(photo.id);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.getProjectPhotos(this.projectId);
+    }
+    //cancellazione dell' immagine dallo storage
+    await this.supabase.deleteImage(photo.imageUrl);
   }
 
   addNewPhoto(): void {

@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Photo } from '../../model/model';
+import { Supabase } from '../../services/supabase-service/supabase';
 
 @Component({
   selector: 'app-photo-spotlight',
@@ -11,4 +12,14 @@ export class PhotoSpotlight {
 
   @Input() photo!: Photo;
 
+  constructor(
+    private supabase: Supabase
+  ) {}
+
+  getPhotoImageUrl(coverImageFilePath: string): string {
+    let coverImageUrl: string = '';
+    coverImageUrl = this.supabase.getImagePublicUrl(coverImageFilePath);
+
+    return coverImageUrl;
+  }
 }

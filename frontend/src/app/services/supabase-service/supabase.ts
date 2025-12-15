@@ -207,4 +207,21 @@ export class Supabase {
       .select('*')
       .eq('id', `${photoId}`)
   }
+
+  async deletePhoto(photoId: number): Promise<any> {
+    return this.supabase
+      .from('photos')
+      .update({ deleted: true })
+      .eq('id', `${photoId}`)
+      .select()
+  }
 }
+
+
+  // async deleteProject(projectId: number): Promise<any> {
+  //   return this.supabase  
+  //     .from('projects')
+  //     .update({ deleted: true })
+  //     .eq('id', `${projectId}`)
+  //     .select()  
+  // }
