@@ -25,7 +25,7 @@ export interface Photo {
   title?: string;
   description?: string;
   imageUrl: string;
-  takenAt?: Date;
+  takenAt?: string;
   place?: string;
   order?: number; // per ordinare le foto nel progetto
   photoType?: string; // potenzialmente, per cambiare la visualizzazione di alcune foto

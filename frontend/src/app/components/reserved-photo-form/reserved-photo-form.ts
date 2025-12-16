@@ -85,8 +85,8 @@ export class ReservedPhotoForm implements OnInit {
       if (response.status === 200) {
         console.log(response.data[0]);
         this.photo = this.mapService.mapPhoto(response.data)[0];
-        if (this.photo.takenAt) {
-          // this.photo.takenAt = this.photo.takenAt.toISOString().split('T')[0];
+        if (this.photo.takenAt) {   //formatta la data in modo compatibile con il date picker del browser
+          this.photo.takenAt = new Date(this.photo.takenAt).toISOString().split('T')[0];
         }
       }
     } catch (error) {
