@@ -215,13 +215,19 @@ export class Supabase {
       .eq('id', `${photoId}`)
       .select()
   }
+
+  async editPhoto(photo: Photo): Promise<any> {
+    return this.supabase
+      .from('photos')
+      .update({
+        updated_at: new Date().toISOString(),
+        title: photo.title,
+        description: photo.description,
+        order: photo.order,
+        image_url: photo.imageUrl,
+        taken_at: photo.takenAt   
+      })
+      .eq('id', `${photo.id}`)
+      .select()
+  }
 }
-
-
-  // async deleteProject(projectId: number): Promise<any> {
-  //   return this.supabase  
-  //     .from('projects')
-  //     .update({ deleted: true })
-  //     .eq('id', `${projectId}`)
-  //     .select()  
-  // }

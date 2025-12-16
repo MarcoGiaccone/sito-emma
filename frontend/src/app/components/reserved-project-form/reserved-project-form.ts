@@ -4,12 +4,12 @@ import { Photo, Project } from '../../model/model';
 import { FormsModule } from '@angular/forms';
 import { Supabase } from '../../services/supabase-service/supabase';
 import { emptyProject } from '../../utils/blank-objects';
-import { ReservedPhotos } from "../reserved-photos/reserved-photos";
 import { MapService } from '../../services/map-service/map-service';
+import { GoToProjects } from "../buttons/go-to-projects/go-to-projects";
 
 @Component({
   selector: 'app-reserved-project-form',
-  imports: [FormsModule],
+  imports: [FormsModule, GoToProjects],
   templateUrl: './reserved-project-form.html',
   styleUrl: './reserved-project-form.css'
 })
@@ -30,8 +30,8 @@ export class ReservedProjectForm implements OnInit {
     private supabase: Supabase,
     private mapService: MapService
   ) {
-    const { projectId, editMode } = this.getProjectIdAndModeFromUrl();
     this.project = structuredClone(emptyProject);
+    const { projectId, editMode } = this.getProjectIdAndModeFromUrl();
     this.projectId = projectId;
     this.editMode = editMode;
   }
@@ -91,8 +91,6 @@ export class ReservedProjectForm implements OnInit {
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      this.router.navigateByUrl('/reserved/projects');
     }
   }
 
@@ -107,8 +105,6 @@ export class ReservedProjectForm implements OnInit {
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      this.router.navigateByUrl('/reserved/projects');
     }
   }
 
@@ -142,25 +138,43 @@ export class ReservedProjectForm implements OnInit {
     }
   }
 
+  isFormComplete(project: any): boolean {
+    const requiredFields: string[] = ['title', 'description'];
+    let isFormComplete: boolean = true;
+    requiredFields.forEach(field => {
+      if (!project[`${field}`]) {
+        isFormComplete = false;
+      }
+    });
+
+    return isFormComplete;
+  }
+
   async submit(): Promise<void> {
-    if (!this.editMode) {
-      //se sono in modalità creazione:
-      //chiamata al bucket per l' upload
-      await this.uploadCoverImage();
-      //chiamata per creare il progetto
-      await this.createNewProject();
-    } else {
-      //se sono in modalità editing
-      if (this.coverImageChanged) {
-        //se l' immagine selezionata è cambiata
-        //chiamata al bucket per eliminare la copertina vecchia
-        await this.deleteCoverImage(this.project.coverImageUrl);
-        //chiamata ul bucket per caricare quella nuova 
+    try {
+      if (!this.editMode) {
+        //se sono in modalità creazione:
+        //chiamata al bucket per l' upload
         await this.uploadCoverImage();
-      } 
-      //chiamata di update per il progetto 
-      await this.editProject();
-    }    
+        //chiamata per creare il progetto
+        await this.createNewProject();
+      } else {
+        //se sono in modalità editing
+        if (this.coverImageChanged) {
+          //se l' immagine selezionata è cambiata
+          //chiamata al bucket per eliminare la copertina vecchia
+          await this.deleteCoverImage(this.project.coverImageUrl);
+          //chiamata ul bucket per caricare quella nuova 
+          await this.uploadCoverImage();
+        } 
+        //chiamata di update per il progetto 
+        await this.editProject();
+      }
+    }  catch (error) {
+      console.log(error);
+    } finally {
+      this.router.navigateByUrl('/reserved/projects');
+    }   
   }
 
   receivePhotoList(list: Photo[]): void {

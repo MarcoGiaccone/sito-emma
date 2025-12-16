@@ -3,13 +3,13 @@ import { Photo } from '../../model/model';
 import { Supabase } from '../../services/supabase-service/supabase';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { blankPhoto } from '../../utils/blank-objects';
 import { Router } from '@angular/router';
 import { MapService } from '../../services/map-service/map-service';
+import { GoToProjects } from "../buttons/go-to-projects/go-to-projects";
 
 @Component({
   selector: 'app-reserved-photos',
-  imports: [DatePipe, FormsModule],
+  imports: [DatePipe, FormsModule, GoToProjects],
   templateUrl: './reserved-photos.html',
   styleUrl: './reserved-photos.css'
 })
@@ -48,7 +48,7 @@ export class ReservedPhotos implements OnInit{
   }
 
   editPhoto(photo: Photo): void {
-
+    this.router.navigateByUrl(`/reserved/projects/${this.projectId}/photos/${photo.id}`)
   }
 
   async deletePhoto(photo: Photo): Promise<void> {

@@ -5,10 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Supabase } from '../../services/supabase-service/supabase';
 import { MapService } from '../../services/map-service/map-service';
+import { GoToPhotos } from "../buttons/go-to-photos/go-to-photos";
 
 @Component({
   selector: 'app-reserved-photo-form',
-  imports: [FormsModule],
+  imports: [FormsModule, GoToPhotos],
   templateUrl: './reserved-photo-form.html',
   styleUrl: './reserved-photo-form.css',
 })
@@ -20,7 +21,7 @@ export class ReservedPhotoForm implements OnInit {
   photoId!: number | null;
   editMode: boolean = false;
   photoImageChanged: boolean = false;
-  previewUrlFromProject!: string;
+  previewUrlFromPhoto!: string;
   previewImageFromFiles!: any;
 
   constructor(
@@ -28,8 +29,9 @@ export class ReservedPhotoForm implements OnInit {
     private supabase: Supabase,
     private mapService: MapService
   ) {
-    const { photoId , editMode } = this.getPhotoIdAndModeFromUrl();
+    this.photo = structuredClone(blankPhoto);
     this.photo.projectId = this.getProjectIdFromUrl();
+    const { photoId , editMode } = this.getPhotoIdAndModeFromUrl();
     this.photoId = photoId;
     this.editMode = editMode;
   }
@@ -54,7 +56,7 @@ export class ReservedPhotoForm implements OnInit {
     if (lastUrlSegment === 'create') {
       photoId = null;
     } else {
-      this.editMode = true;
+      editMode = true;
       photoId = parseInt(lastUrlSegment);
     }
 
@@ -83,9 +85,14 @@ export class ReservedPhotoForm implements OnInit {
       if (response.status === 200) {
         console.log(response.data[0]);
         this.photo = this.mapService.mapPhoto(response.data)[0];
+        if (this.photo.takenAt) {
+          // this.photo.takenAt = this.photo.takenAt.toISOString().split('T')[0];
+        }
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      this.previewUrlFromPhoto = this.supabase.getImagePublicUrl(this.photo.imageUrl)
     }
   }
 
@@ -129,27 +136,35 @@ export class ReservedPhotoForm implements OnInit {
   }
 
   async deletePhotoImage(): Promise<void> {
-
+    await this.supabase.deleteImage(this.photo.imageUrl);
   }
 
   async editPhoto(): Promise<void> {
-
+    try {
+      const response = await this.supabase.editPhoto(this.photo);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async submit(): Promise<void> {
-    console.log('submitting data content', this.photo);
-    if (!this.editMode) {
-      await this.uploadPhotoImage();
-      console.log('submitting data content', this.photo);
-      await this.createNewPhoto();
-    } else {
-      if (this.photoImageChanged) {
-        await this.deletePhotoImage();
+    try {
+      if (!this.editMode) {
         await this.uploadPhotoImage();
+        await this.createNewPhoto();
+      } else {
+        console.log('qui');
+        if (this.photoImageChanged) {
+          await this.deletePhotoImage();
+          await this.uploadPhotoImage();
+        }
+        await this.editPhoto();
       }
-      await this.editPhoto();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.router.navigateByUrl(`/reserved/projects/${this.photo.projectId}/photos`);
     }
-
-    this.router.navigateByUrl(`/reserved/projects/${this.photo.projectId}/photos`);
   }
 }

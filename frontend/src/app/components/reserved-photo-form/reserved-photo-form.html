@@ -1,4 +1,7 @@
 <div class="container">
+    <app-go-to-photos
+    [projectId]="this.photo.projectId"
+    ></app-go-to-photos>
     <div class="card m-3 p-3">
         <div class="d-flex">
             <h1>Aggiunta fotografia</h1>
@@ -54,8 +57,8 @@
             <div class="col-12">
                 @if (previewImageFromFiles) {
                     <img class="w-100" [src]="previewImageFromFiles" alt="preview dell' immagine di copertina del progetto">
-                } @else if (previewUrlFromProject) {
-                    <img class="w-100" [src]="previewUrlFromProject" alt="preview dell' immagine di copertina del progetto">
+                } @else if (previewUrlFromPhoto) {
+                    <img class="w-100" [src]="previewUrlFromPhoto" alt="preview dell' immagine di copertina del progetto">
                 } @else {
                     <p>Nessuna immagine da visualizzare</p>
                 }
