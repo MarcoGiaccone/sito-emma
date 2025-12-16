@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import { environment } from '../../../environments/environment';
 import { Photo, Project } from '../../model/model';
+import { MapService } from '../map-service/map-service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,9 @@ export class Supabase {
 
   supabase!: SupabaseClient;
 
-  constructor() {
+  constructor(
+    private mapService: MapService
+  ) {
     const supabaseUrl = environment.supabaseUrl;
     const supabaseKey = environment.supabaseKey;
     this.supabase = createClient(supabaseUrl, supabaseKey);
@@ -121,10 +124,6 @@ export class Supabase {
     const response = await this.supabase.storage
       .from('image-storage')
       .remove([filepath])
-    
-    if (!response.error) {
-      console.log('Eliminazione dallo storage andato a. buon fine');
-    } 
   }
 
   async deleteImageBulk(filepaths: string[]) {
@@ -132,9 +131,7 @@ export class Supabase {
       .from('image-storage')
       .remove(filepaths)
 
-      if (!response.error) {
-        console.log('Eliminazione andata a buon fine');
-      }
+    console.log(response);
   }
 
   async deleteProjectImages(projectId: number): Promise<void> {
@@ -143,22 +140,21 @@ export class Supabase {
     try {
       //chiamo tutte le foto del progetto
       const response = await this.getPhotosByProjectId(projectId);
-      projectPhotos = response.data;
+      projectPhotos = this.mapService.mapPhoto(response.data);
+      //creo un array di tutti i filepaths
+      projectPhotosFilepaths = projectPhotos.map(photo => { return photo.imageUrl });
+      //se l' array ha elementi dentro, faccio una eliminazione in blocco dallo storage
+      if (projectPhotosFilepaths.length > 0) await this.deleteImageBulk(projectPhotosFilepaths);    
     } catch (error) {
       console.log(error);
     }
+  }
 
-    //creo un array di tutti i filepaths delle foto
-    projectPhotosFilepaths = projectPhotos.map(photo => { return photo.imageUrl });
-    
-    //elimino con una delete bulk
-    if (projectPhotosFilepaths.length > 0) {
-      try {
-        await this.deleteImageBulk(projectPhotosFilepaths);      
-      } catch (error) {
-        console.log(error);
-      }
-    }
+  async deleteProjectPhotos(projectId: number): Promise<any> {
+    return this.supabase
+      .from('photos')
+      .update({ deleted: true })
+      .eq('project_id', projectId);
   }
 
   async getNewPhotoId(): Promise<number> {

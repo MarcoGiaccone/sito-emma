@@ -131,8 +131,7 @@ export class ReservedPhotoForm implements OnInit {
   }
 
   async createNewPhoto(): Promise<void> {
-    const { response, error } = await this.supabase.createNewPhoto(this.photo, this.photo.projectId);
-    console.log(response, error);
+    await this.supabase.createNewPhoto(this.photo, this.photo.projectId);
   }
 
   async deletePhotoImage(): Promise<void> {

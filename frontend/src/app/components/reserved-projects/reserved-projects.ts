@@ -32,7 +32,6 @@ export class ReservedProjects implements OnInit {
       const response = await this.supabase.getProjects();
       if (response.status === 200) {
         this.projects = this.mapService.mapProject(response.data);
-        console.log(this.projects);
       }
     } catch (error) {
       console.log(error);
@@ -60,18 +59,16 @@ export class ReservedProjects implements OnInit {
       } else {
         this.deleteProjectMessage = 'Eliminazione non riuscita :('
       }
+      //cancella le immagini dal progetto
+      await this.supabase.deleteProjectImages(project.id);      
+      // cancella la cover del progetto
+      await this.supabase.deleteImage(project.coverImageUrl);
+      //cancella le foto del progetto
+      await this.supabase.deleteProjectPhotos(project.id);   
     } catch (error) {
       console.log(error);
     } finally {
       this.getProjects();
-    }
-
-    // delete project cover
-    await this.supabase.deleteImage(project.coverImageUrl);
-
-    //delete project images
-    await this.supabase.deleteProjectImages(project.id);      
-
-    
+    } 
   }
 }
