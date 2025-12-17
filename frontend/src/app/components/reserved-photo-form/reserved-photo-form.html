@@ -54,11 +54,11 @@
                     name="photo-image"
                     type="file">
             </div>
-            <div class="col-12">
+            <div class="col-12 d-flex justify-content-center">
                 @if (previewImageFromFiles) {
-                    <img class="w-100" [src]="previewImageFromFiles" alt="preview dell' immagine di copertina del progetto">
+                    <img class="preview-image" [src]="previewImageFromFiles" alt="preview dell' immagine di copertina del progetto">
                 } @else if (previewUrlFromPhoto) {
-                    <img class="w-100" [src]="previewUrlFromPhoto" alt="preview dell' immagine di copertina del progetto">
+                    <img class="preview-image" [src]="previewUrlFromPhoto" alt="preview dell' immagine di copertina del progetto">
                 } @else {
                     <p>Nessuna immagine da visualizzare</p>
                 }

@@ -19,10 +19,12 @@ export class Supabase {
     this.supabase = createClient(supabaseUrl, supabaseKey);
   }
 
+  //client
   get client(): SupabaseClient {
     return this.supabase;
   }
 
+  //projects
   async getProjects(): Promise<any> {
     return this.supabase
       .from('projects')
@@ -100,6 +102,7 @@ export class Supabase {
       .select()
   }
 
+  //images - photos
   async createImage(file: File): Promise<string> {
     const filePath = `${Date.now()}_${file.name}`;
 
@@ -226,4 +229,7 @@ export class Supabase {
       .eq('id', `${photo.id}`)
       .select()
   }
+
+  //autenticazione
+  // async 
 }
