@@ -33,6 +33,5 @@ export class ProjectsHome implements OnInit {
     } catch (error) {
       console.log(error);
     }
-    console.log(this.projects);
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { createClient, SupabaseClient } from '@supabase/supabase-js'
+import { createClient, PostgrestSingleResponse, SupabaseClient } from '@supabase/supabase-js'
 import { environment } from '../../../environments/environment';
 import { Photo, Project } from '../../model/model';
 import { MapService } from '../map-service/map-service';
@@ -231,5 +231,32 @@ export class Supabase {
   }
 
   //autenticazione
-  // async 
+  private async getUser(email:string, password: string ): Promise<PostgrestSingleResponse<any>> {
+    const response: PostgrestSingleResponse<any[]> = await this.supabase
+      .from('users')
+      .select('*')
+      .eq('email', email)
+      .eq('password', password)
+
+    return response;
+  }
+
+  async signIn(email: string, password: string): Promise<any> {
+    let token: string = 'jdsa88sdja89123'
+    const response: PostgrestSingleResponse<any[]> = await this.getUser(email, password);
+
+    if (response.data && response.data[0]) {
+      sessionStorage.setItem('emma_reserved_token', token);
+    }    
+
+    return this.isUserLoggedIn();
+  }
+
+  isUserLoggedIn(): boolean {
+    if (sessionStorage.getItem('emma_reserved_token')) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

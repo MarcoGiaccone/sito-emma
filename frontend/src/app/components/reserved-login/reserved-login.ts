@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Supabase } from '../../services/supabase-service/supabase';
 
 @Component({
   selector: 'app-reserved-login',
@@ -9,24 +10,26 @@ import { Router } from '@angular/router';
   styleUrl: './reserved-login.css'
 })
 export class ReservedLogin {
-
-  username!: string;
-  password!: string;
-  loginErrorMessage!: string;  
+  
+  email = ''
+  password = ''
+  error = ''
 
   constructor(
+    private supabase: Supabase,
     private router: Router
   ) {}
 
-  submit(): void {
-    this.loginErrorMessage = '';
-    if (
-      this.username === 'emma' &&
-      this.password === 'genovese'
-    ) {
-      this.router.navigateByUrl('/reserved/projects');
+  async login() {
+    const isUserLoggedIn: boolean = await this.supabase.signIn(
+      this.email,
+      this.password
+    )
+    console.log('is user logged in ', isUserLoggedIn);
+    if (isUserLoggedIn) {
+      this.router.navigate(['/reserved/projects'])
     } else {
-      this.loginErrorMessage = 'Attenzione! Credenziali errate!';
+      this.error = 'Email o password non corretti!';
     }
   }
 

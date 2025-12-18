@@ -6,6 +6,7 @@ import { Footer } from "../footer/footer";
 import { Photo, Project } from '../../model/model';
 import { MapService } from '../../services/map-service/map-service';
 import { PhotoSpotlight } from '../photo-spotlight/photo-spotlight';
+import { emptyProject } from '../../utils/blank-objects';
 
 @Component({
   selector: 'app-project',
@@ -16,7 +17,7 @@ import { PhotoSpotlight } from '../photo-spotlight/photo-spotlight';
 export class ProjectSpotlight implements OnInit{
 
   projectId!: number;
-  project!: Project;
+  project: Project = structuredClone(emptyProject);
   photos!: Photo[];
   constructor(
     private router: Router,
@@ -49,7 +50,6 @@ export class ProjectSpotlight implements OnInit{
     try {
       const response = await this.supabase.getPhotosByProjectId(this.projectId);
       this.photos = this.mapSerivice.mapPhoto(response.data);
-      console.log(this.photos);
     } catch (error) {
       console.log(error);
     }
