@@ -252,6 +252,10 @@ export class Supabase {
     return this.isUserLoggedIn();
   }
 
+  signOut(): void {
+    sessionStorage.setItem('emma_reserved_token', '');
+  }
+
   isUserLoggedIn(): boolean {
     if (sessionStorage.getItem('emma_reserved_token')) {
       return true;

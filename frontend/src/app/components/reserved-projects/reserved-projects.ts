@@ -71,4 +71,9 @@ export class ReservedProjects implements OnInit {
       this.getProjects();
     } 
   }
+
+  logOut(): void {
+    this.supabase.signOut();
+    this.router.navigateByUrl('/reserved');
+  }
 }

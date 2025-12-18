@@ -8,6 +8,7 @@ import { ReservedProjects } from './components/reserved-projects/reserved-projec
 import { ReservedProjectForm } from './components/reserved-project-form/reserved-project-form';
 import { ReservedPhotos } from './components/reserved-photos/reserved-photos';
 import { ReservedPhotoForm } from './components/reserved-photo-form/reserved-photo-form';
+import { AuthGuard } from './services/auth-guard/auth-guard';
 
 export const routes: Routes = [
     { path: 'home', component: Home },
@@ -15,10 +16,10 @@ export const routes: Routes = [
     { path: 'projects', component: ProjectsHome },
     { path: 'projects/:id', component: ProjectSpotlight },
     { path: 'reserved', component: ReservedLogin },
-    { path: 'reserved/projects', component: ReservedProjects },
-    { path: 'reserved/projects/:id', component: ReservedProjectForm },
-    { path: 'reserved/projects/:id/photos', component: ReservedPhotos },
-    { path: 'reserved/projects/:id/photos/:photoId', component: ReservedPhotoForm },
+    { path: 'reserved/projects', component: ReservedProjects, canActivate: [AuthGuard] },
+    { path: 'reserved/projects/:id', component: ReservedProjectForm, canActivate: [AuthGuard] },
+    { path: 'reserved/projects/:id/photos', component: ReservedPhotos, canActivate: [AuthGuard] },
+    { path: 'reserved/projects/:id/photos/:photoId', component: ReservedPhotoForm, canActivate: [AuthGuard] },
     { path: '', component: Home },
   { path: '**', redirectTo: '' } // fallback 404 → Home
 ];
