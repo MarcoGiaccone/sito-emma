@@ -2,21 +2,24 @@ import { Component, OnInit } from '@angular/core';
 import { Project } from '../../model/model';
 import { Supabase } from '../../services/supabase-service/supabase';
 import { MapService } from '../../services/map-service/map-service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
+import { ModalWarning } from "../modal-warning/modal-warning/modal-warning";
+import { About } from "../about/about";
 
 
 @Component({
   selector: 'app-reserved-projects',
-  imports: [DatePipe],
+  imports: [DatePipe, ModalWarning, NgClass],
   templateUrl: './reserved-projects.html',
   styleUrl: './reserved-projects.css'
 })
 export class ReservedProjects implements OnInit {
 
   projects!: Project[];
+  projectToDelete!: Project;
   deleteProjectMessage!: string;
-
+  isModalOpen: boolean = false;
   constructor(
     private supabase: Supabase,
     private mapService: MapService,
@@ -50,6 +53,11 @@ export class ReservedProjects implements OnInit {
     this.router.navigateByUrl(`/reserved/projects/${project.id}/photos`);
   }
 
+  openWarningModal(project: Project): void {
+    this.projectToDelete = project;
+    this.isModalOpen = true;
+  }
+
   async deleteProject(project: Project): Promise<void> {
     //delete the project
     try {
@@ -75,5 +83,11 @@ export class ReservedProjects implements OnInit {
   logOut(): void {
     this.supabase.signOut();
     this.router.navigateByUrl('/reserved');
+  }
+
+  receiveModalAction(action: boolean): void {
+    if (action) {
+      // this.deleteProject();
+    }
   }
 }

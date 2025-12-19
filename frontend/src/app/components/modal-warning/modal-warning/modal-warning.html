@@ -1,0 +1,12 @@
+<div style="position: fixed; top: calc(50vh - 115px); left: calc(50vw - 185px);">
+    <div class="card p-5" style="width: 370px;">
+        <div>
+            {{ warning }}
+        </div>
+        <div class=" row">
+            <button class="btn btn-danger m-2" (click)="accept()" >Elimina</button>
+
+            <button class="btn btn-primary m-2" (click)="decline()" >Annulla</button>
+        </div>
+    </div>
+</div>
