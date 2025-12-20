@@ -24,7 +24,7 @@
                                     <td class="p-3">{{ project.title }}</td>
                                     <td class="p-3">{{ project.createdAt | date:'dd/MM/yyyy' }}</td>
                                     <td class="p-3">{{ project.description }}</td>
-                                    <td class="p-3 d-flex justify-content-center">
+                                    <td class="p-3">
                                         <i (click)="managePhotos(project)" class="action-icon fa-solid fa-image px-1"></i>
                                         <i (click)="editProject(project)" class="action-icon fa-solid fa-pen px-1"></i>
                                         <i (click)="openWarningModal(project)" class="action-icon fa-solid fa-trash px-1"></i>
