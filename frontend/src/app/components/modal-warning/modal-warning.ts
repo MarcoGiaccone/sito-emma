@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Project } from '../../../model/model';
+import { Project } from '../../model/model';
 
 @Component({
   selector: 'app-modal-warning',
@@ -10,7 +10,6 @@ import { Project } from '../../../model/model';
 export class ModalWarning {
 
   @Input() warning!: string;
-  @Input() projectToDelete!: Project;
   @Input() isLoading: boolean = false;
   @Input() loadingCompleted: boolean = false;
   @Input() loadingSuccess: boolean = true;

@@ -1,6 +1,7 @@
 .spinner {
     font-size: 2rem;
     animation: spin 1s linear infinite;
+    color: rgb(3, 78, 252);
 }
 
 .loading-result {

@@ -242,7 +242,7 @@ export class Supabase {
   }
 
   async signIn(email: string, password: string): Promise<any> {
-    let token: string = 'jdsa88sdja89123'
+    let token: string = 'jdsa88sdja89123';
     const response: PostgrestSingleResponse<any[]> = await this.getUser(email, password);
 
     if (response.data && response.data[0]) {

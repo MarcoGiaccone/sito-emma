@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Photo } from '../../model/model';
 import { Supabase } from '../../services/supabase-service/supabase';
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MapService } from '../../services/map-service/map-service';
 import { GoToProjects } from "../buttons/go-to-projects/go-to-projects";
+import { ModalWarning } from "../modal-warning/modal-warning";
+import { blankPhoto } from '../../utils/blank-objects';
 
 @Component({
   selector: 'app-reserved-photos',
-  imports: [DatePipe, FormsModule, GoToProjects],
+  imports: [DatePipe, FormsModule, GoToProjects, ModalWarning, NgClass],
   templateUrl: './reserved-photos.html',
   styleUrl: './reserved-photos.css'
 })
@@ -17,6 +19,12 @@ export class ReservedPhotos implements OnInit{
 
   photos: Photo[] = [];
   projectId!: number;
+  photoToDelete: Photo = structuredClone(blankPhoto);
+  deletePhotoMessage!: string;
+  isModalOpen: boolean = false;
+  isDeletionLoading: boolean = false;
+  deletionLoadingCompleted: boolean = false;
+  deletionSuccessful: boolean = true;
 
   constructor(
     private supabase: Supabase,
@@ -51,25 +59,50 @@ export class ReservedPhotos implements OnInit{
     this.router.navigateByUrl(`/reserved/projects/${this.projectId}/photos/${photo.id}`)
   }
 
-  async deletePhoto(photo: Photo): Promise<void> {
-    //cancellazione logica dei metadati
-    try {
-      await this.supabase.deletePhoto(photo.id);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      this.getProjectPhotos(this.projectId);
-    }
-    //cancellazione dell' immagine dallo storage
-    await this.supabase.deleteImage(photo.imageUrl);
-  }
-
   addNewPhoto(): void {
     this.router.navigateByUrl(`reserved/projects/${this.projectId}/photos/create`);
   }
 
-  generatePhotoId(): number {
-    const id = new Date().getTime();
-    return id;
+  openWarningModal(photo: Photo): void {
+    this.photoToDelete = photo;
+    this.isModalOpen = true;
+  }
+
+  closeWarningModal(): void {
+    this.isDeletionLoading = false;
+    this.deletionLoadingCompleted = true;
+    this.getProjectPhotos(this.projectId);
+    setTimeout(() => {
+      this.deletionLoadingCompleted = false;
+      this.isModalOpen = false;
+    }, 2000)
+  }
+
+  receiveModalAction(action: boolean): void {
+    if (action) {
+      this.deletePhoto(this.photoToDelete);
+    } else {
+      this.isModalOpen = false;
+    }
+  }
+
+  async deletePhoto(photo: Photo): Promise<void> {
+    //cancellazione logica dei metadati
+    try {
+      this.isDeletionLoading = true;
+      const response = await this.supabase.deletePhoto(photo.id);
+      console.log(response);
+      if (response.status === 200) {
+        this.deletePhotoMessage = 'Eliminazione avventua con successo!';
+      } else {
+        this.deletePhotoMessage = 'Eliminazione non riuscita :(';
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.closeWarningModal();
+    }
+    //cancellazione dell' immagine dallo storage
+    await this.supabase.deleteImage(photo.imageUrl);
   }
 }

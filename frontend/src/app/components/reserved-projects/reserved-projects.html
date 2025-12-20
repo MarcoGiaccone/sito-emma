@@ -1,14 +1,14 @@
 <div class="">
     <div style="display: flex; justify-content: center;">
         <div class="w-75"> 
-            <button class="btn btn-danger p-2 m-2" (click)="logOut()">Logout</button>
+            <button class="btn btn-danger p-2 m-2" (click)="logOut()">Logout<i class="fa-solid fa-power-off ms-1"></i></button>
             <div class="card m-3 p-3">
                 <div class="mb-2">
                     <h1>I tuoi progetti</h1>
                 </div>
                 <div class="list-container">
-                    <table class="table" >
-                        <thead class="table-dark" >
+                    <table class="table">
+                        <thead class="table-dark">
                             <tr>
                                 <th class="px-3">ID</th>
                                 <th class="px-3">Titolo</th>
@@ -24,7 +24,7 @@
                                     <td class="p-3">{{ project.title }}</td>
                                     <td class="p-3">{{ project.createdAt | date:'dd/MM/yyyy' }}</td>
                                     <td class="p-3">{{ project.description }}</td>
-                                    <td class="p-3">
+                                    <td class="p-3 d-flex justify-content-center">
                                         <i (click)="managePhotos(project)" class="action-icon fa-solid fa-image px-1"></i>
                                         <i (click)="editProject(project)" class="action-icon fa-solid fa-pen px-1"></i>
                                         <i (click)="openWarningModal(project)" class="action-icon fa-solid fa-trash px-1"></i>
@@ -33,7 +33,7 @@
                             }
                         </tbody>
                     </table>
-                    <button class="btn btn-success p-2 m-3 float-end" (click)="createNewProject()">Crea un nuovo progetto</button>
+                    <button class="btn btn-success p-2 m-3 float-end" (click)="createNewProject()">Crea nuovo</button>
                 </div>
             </div>
         </div>
@@ -45,8 +45,7 @@
     [loadingCompleted]="deletionLoadingCompleted"
     [loadingMessage]="deleteProjectMessage"
     [loadingSuccess]="deletionSuccessful"
-    [warning]="'Sei sicur* di voler eliminare il progetto? '"
-    [projectToDelete]="projectToDelete"
+    [warning]="`Sei sicur* di voler eliminare definitivamente il progetto '${projectToDelete.title}?'`"
     (action)="receiveModalAction($event)"
     ></app-modal-warning>
 </div>

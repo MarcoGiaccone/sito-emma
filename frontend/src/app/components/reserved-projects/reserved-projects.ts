@@ -4,7 +4,8 @@ import { Supabase } from '../../services/supabase-service/supabase';
 import { MapService } from '../../services/map-service/map-service';
 import { DatePipe, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
-import { ModalWarning } from "../modal-warning/modal-warning/modal-warning";
+import { ModalWarning } from "../modal-warning/modal-warning";
+import { emptyProject } from '../../utils/blank-objects';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { ModalWarning } from "../modal-warning/modal-warning/modal-warning";
 export class ReservedProjects implements OnInit {
 
   projects!: Project[];
-  projectToDelete!: Project;
+  projectToDelete: Project = structuredClone(emptyProject);
   deleteProjectMessage!: string;
   isModalOpen: boolean = false;
   isDeletionLoading: boolean = false;
@@ -70,8 +71,15 @@ export class ReservedProjects implements OnInit {
     }, 2000)
   }
 
+  receiveModalAction(action: boolean): void {
+    if (action) {
+      this.deleteProject(this.projectToDelete);
+    } else {
+      this.isModalOpen = false;
+    }
+  }
+
   async deleteProject(project: Project): Promise<void> {
-    //delete the project
     try {
       this.isDeletionLoading = true;
       const response = await this.supabase.deleteProject(project.id);     //cancella i metadati del progetto
@@ -96,13 +104,5 @@ export class ReservedProjects implements OnInit {
   logOut(): void {
     this.supabase.signOut();
     this.router.navigateByUrl('/reserved');
-  }
-
-  receiveModalAction(action: boolean): void {
-    if (action) {
-      this.deleteProject(this.projectToDelete);
-    } else {
-      this.isModalOpen = false;
-    }
   }
 }
