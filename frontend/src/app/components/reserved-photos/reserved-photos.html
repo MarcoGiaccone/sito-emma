@@ -8,12 +8,12 @@
             <table class="table" >
                 <thead class="table-dark" >
                     <tr >
-                        <th class="ml-5">ID</th>
-                        <th class="ml-5">Titolo</th>
-                        <th class="ml-5">Catturata il</th>
-                        <th class="ml-5">Descrizione</th>
-                        <th class="ml-5">Ordine</th>
-                        <th class="ml-5">Azioni</th>
+                        <th class="px-3">ID</th>
+                        <th class="px-3">Titolo</th>
+                        <th class="px-3">Catturata il</th>
+                        <th class="px-3">Descrizione</th>
+                        <th class="px-3">Ordine</th>
+                        <th class="px-3">Azioni</th>
                     </tr>
                 </thead>
                 <tbody class="">
@@ -30,8 +30,8 @@
                                 <td class="p-3">{{ photo.description }}</td>
                                 <td class="p-3">{{ photo.order }}</td>
                                 <td class="p-3">
-                                    <i (click)="editPhoto(photo)" class="action-icon fa-solid fa-pen"></i>
-                                    <i (click)="deletePhoto(photo)" class="action-icon fa-solid fa-trash"></i>
+                                    <i (click)="editPhoto(photo)" class="action-icon fa-solid fa-pen px-1"></i>
+                                    <i (click)="deletePhoto(photo)" class="action-icon fa-solid fa-trash px-1"></i>
                                 </td>
                             </tr>
                         }

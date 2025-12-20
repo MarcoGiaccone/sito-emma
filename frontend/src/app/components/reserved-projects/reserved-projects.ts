@@ -5,7 +5,6 @@ import { MapService } from '../../services/map-service/map-service';
 import { DatePipe, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { ModalWarning } from "../modal-warning/modal-warning/modal-warning";
-import { About } from "../about/about";
 
 
 @Component({
@@ -20,6 +19,9 @@ export class ReservedProjects implements OnInit {
   projectToDelete!: Project;
   deleteProjectMessage!: string;
   isModalOpen: boolean = false;
+  isDeletionLoading: boolean = false;
+  deletionLoadingCompleted: boolean = false;
+  deletionSuccessful: boolean = true;
   constructor(
     private supabase: Supabase,
     private mapService: MapService,
@@ -58,25 +60,36 @@ export class ReservedProjects implements OnInit {
     this.isModalOpen = true;
   }
 
+  closeWarningModal(): void {
+    this.isDeletionLoading = false;
+    this.deletionLoadingCompleted = true;
+    this.getProjects();
+    setTimeout(() => {
+      this.deletionLoadingCompleted = false;
+      this.isModalOpen = false;
+    }, 2000)
+  }
+
   async deleteProject(project: Project): Promise<void> {
     //delete the project
     try {
-      const response = await this.supabase.deleteProject(project.id);
+      this.isDeletionLoading = true;
+      const response = await this.supabase.deleteProject(project.id);     //cancella i metadati del progetto
       if (response.status === 200){
-        this.deleteProjectMessage = 'Eliminazione avvenuta con successo!'
+        this.deletionSuccessful = true;
+        this.deleteProjectMessage = 'Eliminazione avvenuta con successo!';
       } else {
-        this.deleteProjectMessage = 'Eliminazione non riuscita :('
+        this.deletionSuccessful = false;
+        this.deleteProjectMessage = 'Eliminazione non riuscita :(';
       }
-      //cancella le immagini dal progetto
-      await this.supabase.deleteProjectImages(project.id);      
-      // cancella la cover del progetto
-      await this.supabase.deleteImage(project.coverImageUrl);
-      //cancella le foto del progetto
-      await this.supabase.deleteProjectPhotos(project.id);   
+  
+      await this.supabase.deleteProjectImages(project.id);                //cancella le immagini dal progetto (storage)
+      await this.supabase.deleteImage(project.coverImageUrl);             //cancella la cover del progetto (storage)
+      await this.supabase.deleteProjectPhotos(project.id);                //cancella le foto del progetto (metadati)
     } catch (error) {
       console.log(error);
     } finally {
-      this.getProjects();
+      this.closeWarningModal();
     } 
   }
 
@@ -87,7 +100,9 @@ export class ReservedProjects implements OnInit {
 
   receiveModalAction(action: boolean): void {
     if (action) {
-      // this.deleteProject();
+      this.deleteProject(this.projectToDelete);
+    } else {
+      this.isModalOpen = false;
     }
   }
 }

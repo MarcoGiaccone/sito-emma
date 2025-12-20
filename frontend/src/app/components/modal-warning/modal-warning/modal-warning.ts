@@ -11,6 +11,11 @@ export class ModalWarning {
 
   @Input() warning!: string;
   @Input() projectToDelete!: Project;
+  @Input() isLoading: boolean = false;
+  @Input() loadingCompleted: boolean = false;
+  @Input() loadingSuccess: boolean = true;
+  @Input() loadingMessage: string = '';
+  @Input() resultMessage: string = '';
   @Output() action = new EventEmitter<boolean>();
 
   accept(): void {
@@ -20,5 +25,7 @@ export class ModalWarning {
   decline(): void {
     this.action.emit(false);
   }
+
+
 
 }

@@ -1,4 +1,6 @@
 .action-icon {
-    margin: 0 0.7rem;
+    font-size: 1.3rem;
+}
+.action-icon:hover {
     cursor: pointer;
 }
