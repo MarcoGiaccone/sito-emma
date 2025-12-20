@@ -6,6 +6,7 @@ import { Supabase } from '../../services/supabase-service/supabase';
 import { emptyProject } from '../../utils/blank-objects';
 import { MapService } from '../../services/map-service/map-service';
 import { GoToProjects } from "../buttons/go-to-projects/go-to-projects";
+import { isOnlyNumbers } from '../../utils/utils';
 
 @Component({
   selector: 'app-reserved-project-form',
@@ -15,7 +16,7 @@ import { GoToProjects } from "../buttons/go-to-projects/go-to-projects";
 })
 export class ReservedProjectForm implements OnInit {
 
-  project!: Project;
+  project: Project = structuredClone(emptyProject);
   projectId!: number | null;
   photos!: Photo[];
   imageToAdd!: File;
@@ -30,14 +31,13 @@ export class ReservedProjectForm implements OnInit {
     private supabase: Supabase,
     private mapService: MapService
   ) {
-    this.project = structuredClone(emptyProject);
     const { projectId, editMode } = this.getProjectIdAndModeFromUrl();
     this.projectId = projectId;
     this.editMode = editMode;
   }
 
   ngOnInit(): void {
-    if (this.projectId) {
+    if (this.projectId || this.projectId === 0) {
       this.getProject(this.projectId);  
     } else {
       this.getNewId();
@@ -52,9 +52,12 @@ export class ReservedProjectForm implements OnInit {
 
     if (lastUrlSegment === 'create') {
       projectId = null;
-    } else {
-      projectId = parseInt(lastUrlSegment);
+    } else if (isOnlyNumbers(lastUrlSegment)) {
       editMode = true;
+      projectId = parseInt(lastUrlSegment);
+    } else {
+      projectId = null;
+      this.resourceNotFound();
     }
 
     return { projectId, editMode };
@@ -64,13 +67,17 @@ export class ReservedProjectForm implements OnInit {
     try {
       const response = await this.supabase.getProjectById(projectId);
       if (response.status === 200) {
-        console.log(response.data[0]);
         this.project = this.mapService.mapProject(response.data)[0];
+      }
+
+      if (response.data.length < 1 || response.status !== 200) {
+        this.resourceNotFound();
+        return
       }
     } catch (error) {
       console.log(error);
     } finally {
-      this.previewUrlFromProject = this.supabase.getImagePublicUrl(this.project.coverImageUrl); 
+      this.previewUrlFromProject = this.supabase.getImagePublicUrl(this.project?.coverImageUrl); 
     }
   }
 
@@ -177,7 +184,7 @@ export class ReservedProjectForm implements OnInit {
     }   
   }
 
-  receivePhotoList(list: Photo[]): void {
-    console.log('received the list', list);
+  resourceNotFound(): void {
+    this.router.navigateByUrl('/reserved/not-found');
   }
 }

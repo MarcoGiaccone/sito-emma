@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { Supabase } from '../../services/supabase-service/supabase';
 import { MapService } from '../../services/map-service/map-service';
 import { GoToPhotos } from "../buttons/go-to-photos/go-to-photos";
+import { isOnlyNumbers } from '../../utils/utils';
 
 @Component({
   selector: 'app-reserved-photo-form',
@@ -53,11 +54,16 @@ export class ReservedPhotoForm implements OnInit {
     let photoId: number | null;
     let editMode: boolean = false;
 
+    console.log(lastUrlSegment)
+
     if (lastUrlSegment === 'create') {
       photoId = null;
-    } else {
+    } else if (isOnlyNumbers(lastUrlSegment)) {
       editMode = true;
       photoId = parseInt(lastUrlSegment);
+    } else {
+      photoId = null;
+      this.resourceNotFound();
     }
 
     return { photoId, editMode }
@@ -81,18 +87,32 @@ export class ReservedPhotoForm implements OnInit {
 
   async getPhoto(projectId: number): Promise<void> {
     try {
+      const response = await this.supabase.getProjectById(projectId);
+      if (response.data.length < 1 || response.status !== 200) {
+        this.resourceNotFound();
+        return
+      } 
+    } catch (error) {
+      console.log(error);
+    }
+
+    try {
       const response = await this.supabase.getPhotoById(projectId);
       if (response.status === 200) {
-        console.log(response.data[0]);
         this.photo = this.mapService.mapPhoto(response.data)[0];
-        if (this.photo.takenAt) {   //formatta la data in modo compatibile con il date picker del browser
+        if (this.photo && this.photo.takenAt) {   //formatta la data in modo compatibile con il date picker del browser
           this.photo.takenAt = new Date(this.photo.takenAt).toISOString().split('T')[0];
         }
+      }
+      
+      if (response.data.length < 1 || response.status !== 200) {
+        this.resourceNotFound();
+        return
       }
     } catch (error) {
       console.log(error);
     } finally {
-      this.previewUrlFromPhoto = this.supabase.getImagePublicUrl(this.photo.imageUrl)
+      this.previewUrlFromPhoto = this.supabase.getImagePublicUrl(this.photo?.imageUrl)
     }
   }
 
@@ -165,5 +185,9 @@ export class ReservedPhotoForm implements OnInit {
     } finally {
       this.router.navigateByUrl(`/reserved/projects/${this.photo.projectId}/photos`);
     }
+  }
+
+  resourceNotFound(): void {
+    this.router.navigateByUrl('reserved/not-found');
   }
 }

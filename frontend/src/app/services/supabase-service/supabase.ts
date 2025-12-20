@@ -52,7 +52,8 @@ export class Supabase {
     return this.supabase
       .from('projects')
       .select('*')
-      .eq('id', `${projectId}`);
+      .eq('id', `${projectId}`)
+      .eq('deleted', false)
   }
 
   async getPhotosByProjectId(projectId: number): Promise<any> {
@@ -205,6 +206,7 @@ export class Supabase {
       .from('photos')
       .select('*')
       .eq('id', `${photoId}`)
+      .eq('deleted', false)
   }
 
   async deletePhoto(photoId: number): Promise<any> {

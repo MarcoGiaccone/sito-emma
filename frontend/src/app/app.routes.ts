@@ -9,6 +9,7 @@ import { ReservedProjectForm } from './components/reserved-project-form/reserved
 import { ReservedPhotos } from './components/reserved-photos/reserved-photos';
 import { ReservedPhotoForm } from './components/reserved-photo-form/reserved-photo-form';
 import { AuthGuard } from './services/auth-guard/auth-guard';
+import { NotFound } from './components/not-found/not-found';
 
 export const routes: Routes = [
   { path: 'home', component: Home },
@@ -20,6 +21,7 @@ export const routes: Routes = [
   { path: 'reserved/projects/:id', component: ReservedProjectForm, canActivate: [AuthGuard] },
   { path: 'reserved/projects/:id/photos', component: ReservedPhotos, canActivate: [AuthGuard] },
   { path: 'reserved/projects/:id/photos/:photoId', component: ReservedPhotoForm, canActivate: [AuthGuard] },
+  { path: 'reserved/not-found', component: NotFound, canActivate: [AuthGuard] },
   { path: '', component: Home },
   { path: '**', redirectTo: '' } // fallback 404 → Home
 ];
