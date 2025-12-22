@@ -34,6 +34,7 @@ export class ReservedPhotos implements OnInit{
 
   ngOnInit(): void {
     this.projectId = this.getProjectIdFromUrl();
+    this.getProject(this.projectId);
     this.getProjectPhotos(this.projectId);
   }
 
@@ -46,13 +47,23 @@ export class ReservedPhotos implements OnInit{
     return projectId
   }
 
-  async getProjectPhotos(projectId: number): Promise<void> {
+  async getProject(projectId: number): Promise<void> {
     try {
-      const response = await this.supabase.getPhotosByProjectId(projectId);
+      const response = await this.supabase.getProjectById(projectId);
+      console.log(response);
       if (response.data && response.data.length < 1) {
         this.resourceNotFound();
         return
-      } else {
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getProjectPhotos(projectId: number): Promise<void> {
+    try {
+      const response = await this.supabase.getPhotosByProjectId(projectId);
+      if (response.status === 200) {
         this.photos = this.mapService.mapPhoto(response.data);
       }
     } catch (error) {

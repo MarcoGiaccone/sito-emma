@@ -16,18 +16,10 @@ export class NotFound implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    // const navigation
-    // console.log(navigationState);
+
   }
 
   navigate(): void {
-    // switch ('asd') {
-    //   case 'asd': {
-
-    //   }
-    // }
     this.router.navigateByUrl('/reserved/projects');
   }
-
-
 }
