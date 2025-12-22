@@ -54,7 +54,7 @@ export class ReservedPhotoForm implements OnInit {
     let photoId: number | null;
     let editMode: boolean = false;
 
-    console.log(lastUrlSegment)
+    console.log(isOnlyNumbers(lastUrlSegment))
 
     if (lastUrlSegment === 'create') {
       photoId = null;
@@ -85,10 +85,12 @@ export class ReservedPhotoForm implements OnInit {
     }
   }
 
-  async getPhoto(projectId: number): Promise<void> {
+  async getPhoto(photoId: number): Promise<void> {
     try {
-      const response = await this.supabase.getProjectById(projectId);
+      const response = await this.supabase.getProjectById(this.photo.projectId);
+      console.log(response);
       if (response.data.length < 1 || response.status !== 200) {
+        
         this.resourceNotFound();
         return
       } 
@@ -97,7 +99,7 @@ export class ReservedPhotoForm implements OnInit {
     }
 
     try {
-      const response = await this.supabase.getPhotoById(projectId);
+      const response = await this.supabase.getPhotoById(photoId);
       if (response.status === 200) {
         this.photo = this.mapService.mapPhoto(response.data)[0];
         if (this.photo && this.photo.takenAt) {   //formatta la data in modo compatibile con il date picker del browser
@@ -188,6 +190,8 @@ export class ReservedPhotoForm implements OnInit {
   }
 
   resourceNotFound(): void {
-    this.router.navigateByUrl('reserved/not-found');
+    this.router.navigate(['reserved/not-found'], {
+      state: { goBackTo: 'photoForm' }
+    });
   }
 }

@@ -185,6 +185,9 @@ export class ReservedProjectForm implements OnInit {
   }
 
   resourceNotFound(): void {
-    this.router.navigateByUrl('/reserved/not-found');
+    
+    this.router.navigate(['reserved/not-found'], {
+      state: { goBackTo: 'projectForm' }
+    });
   }
 }

@@ -49,7 +49,12 @@ export class ReservedPhotos implements OnInit{
   async getProjectPhotos(projectId: number): Promise<void> {
     try {
       const response = await this.supabase.getPhotosByProjectId(projectId);
-      this.photos = this.mapService.mapPhoto(response.data);
+      if (response.data && response.data.length < 1) {
+        this.resourceNotFound();
+        return
+      } else {
+        this.photos = this.mapService.mapPhoto(response.data);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -104,5 +109,9 @@ export class ReservedPhotos implements OnInit{
     }
     //cancellazione dell' immagine dallo storage
     await this.supabase.deleteImage(photo.imageUrl);
+  }
+
+  resourceNotFound(): void {
+    this.router.navigateByUrl('reserved/not-found');
   }
 }

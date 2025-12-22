@@ -1,8 +1,11 @@
-<div>
-    <div>
-        <div>
+<div class="container">
+    <div class="d-flex justify-content-center mt-5">
+        <div style="width: 50vw;" class="d-flex flex-column align-items-center card p-5">
             <p>OOPS! La risorsa che stai cercando non esiste!</p>
-            <button class="btm stn-secondary">Home</button>
+            <img src="/404-bear.png" alt="confused cartoon bear" style="width: 350px;">
+            <div class="d-flex justify-content-center">
+                <button class="btn btn-secondary" (click)="navigate()">{{ buttonText ? buttonText : 'Home' }}</button>
+            </div>
         </div>
     </div>
 </div>

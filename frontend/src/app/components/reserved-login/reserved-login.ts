@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Supabase } from '../../services/supabase-service/supabase';
@@ -9,7 +9,7 @@ import { Supabase } from '../../services/supabase-service/supabase';
   templateUrl: './reserved-login.html',
   styleUrl: './reserved-login.css'
 })
-export class ReservedLogin {
+export class ReservedLogin implements OnInit{
   
   email = ''
   password = ''
@@ -20,7 +20,13 @@ export class ReservedLogin {
     private router: Router
   ) {}
 
-  async login() {
+  ngOnInit(): void {
+    if (this.supabase.isUserLoggedIn()) {
+      this.router.navigateByUrl('/reserved/projects');
+    }
+  }
+
+  async login(): Promise<void> {
     const isUserLoggedIn: boolean = await this.supabase.signIn(
       this.email,
       this.password
