@@ -86,30 +86,36 @@ export class ReservedPhotoForm implements OnInit {
   }
 
   async getPhoto(photoId: number): Promise<void> {
+    //chiama progetto e controlla se esiste
     try {
       const response = await this.supabase.getProjectById(this.photo.projectId);
-      console.log(response);
-      if (response.data.length < 1 || response.status !== 200) {
-        
+      if (response && response.data && response.data[0]) {
+        this.projectId = response.data[0].id;
+      } else {
         this.resourceNotFound();
         return
-      } 
+      }
     } catch (error) {
       console.log(error);
     }
 
+    //chiama foto e controlla se esiste
     try {
       const response = await this.supabase.getPhotoById(photoId);
-      if (response.status === 200) {
+      if (response && response.data && response.data[0]) {
         this.photo = this.mapService.mapPhoto(response.data)[0];
         if (this.photo && this.photo.takenAt) {   //formatta la data in modo compatibile con il date picker del browser
           this.photo.takenAt = new Date(this.photo.takenAt).toISOString().split('T')[0];
         }
-      }
-      
-      if (response.data.length < 1 || response.status !== 200) {
+      } else {
         this.resourceNotFound();
         return
+      }
+
+      //controlla che la foto appartenga al progetto
+      if (this.projectId !== this.photo.projectId) {
+        this.resourceNotFound();
+        return;
       }
     } catch (error) {
       console.log(error);
