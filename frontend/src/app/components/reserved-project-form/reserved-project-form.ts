@@ -7,10 +7,11 @@ import { emptyProject } from '../../utils/blank-objects';
 import { MapService } from '../../services/map-service/map-service';
 import { GoToProjects } from "../buttons/go-to-projects/go-to-projects";
 import { isOnlyNumbers } from '../../utils/utils';
+import { ModalCreation } from '../modal-creation/modal-creation';
 
 @Component({
   selector: 'app-reserved-project-form',
-  imports: [FormsModule, GoToProjects],
+  imports: [FormsModule, GoToProjects, ModalCreation],
   templateUrl: './reserved-project-form.html',
   styleUrl: './reserved-project-form.css'
 })
@@ -25,6 +26,14 @@ export class ReservedProjectForm implements OnInit {
   previewImageFromFiles!: any;
   editMode: boolean = false;
   messageOnSubmit!: string;
+
+  //logica modale
+  isSubmitModalOpen: boolean = false;
+  isSubmitLoading: boolean = false;
+  submitLoadingMessage: string  = '';
+  submitResultMessage: string = '';
+  submitSuccess: boolean = true;
+  submitCompleted: boolean = false;
 
   constructor(
     private router: Router,
@@ -157,30 +166,39 @@ export class ReservedProjectForm implements OnInit {
     return isFormComplete;
   }
 
+  closeSubmitModal(): void {
+    this.isSubmitLoading = false;
+    this.submitCompleted = true;
+    setTimeout(() => {
+      this.isSubmitModalOpen = false;
+      this.router.navigateByUrl(`/reserved/projects`);
+    }, 4000);
+  }
+
   async submit(): Promise<void> {
+    this.isSubmitModalOpen = true;
+    this.isSubmitLoading = true;
     try {
       if (!this.editMode) {
-        //se sono in modalità creazione:
-        //chiamata al bucket per l' upload
+        this.submitLoadingMessage = 'Creazione in corso';
         await this.uploadCoverImage();
-        //chiamata per creare il progetto
         await this.createNewProject();
+        this.submitLoadingMessage = 'Creazione riuscita';
       } else {
-        //se sono in modalità editing
-        if (this.coverImageChanged) {
-          //se l' immagine selezionata è cambiata
-          //chiamata al bucket per eliminare la copertina vecchia
+        this.submitLoadingMessage = 'Modifica in corsa'
+        if (this.coverImageChanged) {          
           await this.deleteCoverImage(this.project.coverImageUrl);
-          //chiamata ul bucket per caricare quella nuova 
           await this.uploadCoverImage();
         } 
-        //chiamata di update per il progetto 
         await this.editProject();
+        this.submitLoadingMessage = 'Modifica riuscita';
       }
     }  catch (error) {
+      this.submitLoadingMessage = 'Operazione non riuscita :(';
+      this.submitSuccess = false;
       console.log(error);
     } finally {
-      this.router.navigateByUrl('/reserved/projects');
+      this.closeSubmitModal();
     }   
   }
 

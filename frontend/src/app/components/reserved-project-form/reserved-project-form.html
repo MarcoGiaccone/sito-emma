@@ -52,4 +52,13 @@
         </div>
     </div>
 </div>
+@if (isSubmitModalOpen) {
+    <app-modal-creation
+    [isLoading]="isSubmitLoading"
+    [loadingCompleted]="submitCompleted"
+    [loadingSuccess]="submitSuccess"
+    [loadingMessage]="submitLoadingMessage"
+    [resultMessage]="submitResultMessage"
+    ></app-modal-creation>
+}
 

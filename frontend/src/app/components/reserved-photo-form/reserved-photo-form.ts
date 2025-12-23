@@ -25,6 +25,8 @@ export class ReservedPhotoForm implements OnInit {
   photoImageChanged: boolean = false;
   previewUrlFromPhoto!: string;
   previewImageFromFiles!: any;
+
+  //logica modale
   isSubmitModalOpen: boolean = false;
   isSubmitLoading: boolean = false;
   submitLoadingMessage: string  = '';
@@ -188,7 +190,7 @@ export class ReservedPhotoForm implements OnInit {
     setTimeout(() => {
       this.isSubmitModalOpen = false;
       this.router.navigateByUrl(`/reserved/projects/${this.photo.projectId}/photos`);
-    }, 5000);
+    }, 4000);
   }
   
   async submit(): Promise<void> {
@@ -196,12 +198,12 @@ export class ReservedPhotoForm implements OnInit {
     this.isSubmitLoading = true;
     try {
       if (!this.editMode) {
-        this.submitLoadingMessage = 'Creazione di una nuova fotografia in corso';
+        this.submitLoadingMessage = 'Creazione in corso';
         await this.uploadPhotoImage();
         await this.createNewPhoto();
         this.submitLoadingMessage = 'Creazione riuscita!';
       } else {
-        this.submitLoadingMessage = 'Modifica di una fotografia in corso';
+        this.submitLoadingMessage = 'Modifica in corso';
         if (this.photoImageChanged) {
           await this.deletePhotoImage();
           await this.uploadPhotoImage();
