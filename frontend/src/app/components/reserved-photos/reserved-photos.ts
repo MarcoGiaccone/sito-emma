@@ -18,6 +18,7 @@ import { blankPhoto } from '../../utils/blank-objects';
 export class ReservedPhotos implements OnInit{
 
   photos: Photo[] = [];
+  isPhotosLoading: boolean = true;
   projectId!: number;
   photoToDelete: Photo = structuredClone(blankPhoto);
   deletePhotoMessage!: string;
@@ -62,12 +63,15 @@ export class ReservedPhotos implements OnInit{
 
   async getProjectPhotos(projectId: number): Promise<void> {
     try {
+      this.isPhotosLoading = true;
       const response = await this.supabase.getPhotosByProjectId(projectId);
       if (response.status === 200) {
         this.photos = this.mapService.mapPhoto(response.data);
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      this.isPhotosLoading = false;
     }
   }
 
@@ -112,14 +116,15 @@ export class ReservedPhotos implements OnInit{
         this.deletePhotoMessage = 'Eliminazione avventua con successo!';
       } else {
         this.deletePhotoMessage = 'Eliminazione non riuscita :(';
+        return
       }
+      //cancellazione dell' immagine dallo storage
+      await this.supabase.deleteImage(photo.imageUrl);
     } catch (error) {
       console.log(error);
     } finally {
       this.closeWarningModal();
     }
-    //cancellazione dell' immagine dallo storage
-    await this.supabase.deleteImage(photo.imageUrl);
   }
 
   resourceNotFound(): void {

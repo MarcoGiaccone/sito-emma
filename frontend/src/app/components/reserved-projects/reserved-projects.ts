@@ -17,6 +17,7 @@ import { emptyProject } from '../../utils/blank-objects';
 export class ReservedProjects implements OnInit {
 
   projects!: Project[];
+  isProjectsLoading: boolean = false;
   projectToDelete: Project = structuredClone(emptyProject);
   deleteProjectMessage!: string;
   isModalOpen: boolean = false;
@@ -35,12 +36,15 @@ export class ReservedProjects implements OnInit {
 
   async getProjects(): Promise<void> {
     try {
+      this.isProjectsLoading = true;
       const response = await this.supabase.getProjects();
       if (response.status === 200) {
         this.projects = this.mapService.mapProject(response.data);
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      this.isProjectsLoading = false;
     }
   }
 
