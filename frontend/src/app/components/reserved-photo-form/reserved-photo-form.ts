@@ -7,10 +7,11 @@ import { Supabase } from '../../services/supabase-service/supabase';
 import { MapService } from '../../services/map-service/map-service';
 import { GoToPhotos } from "../buttons/go-to-photos/go-to-photos";
 import { isOnlyNumbers } from '../../utils/utils';
+import { ModalCreation } from '../modal-creation/modal-creation';
 
 @Component({
   selector: 'app-reserved-photo-form',
-  imports: [FormsModule, GoToPhotos],
+  imports: [FormsModule, GoToPhotos, ModalCreation],
   templateUrl: './reserved-photo-form.html',
   styleUrl: './reserved-photo-form.css',
 })
@@ -24,6 +25,12 @@ export class ReservedPhotoForm implements OnInit {
   photoImageChanged: boolean = false;
   previewUrlFromPhoto!: string;
   previewImageFromFiles!: any;
+  isSubmitModalOpen: boolean = false;
+  isSubmitLoading: boolean = false;
+  submitLoadingMessage: string  = '';
+  submitResultMessage: string = '';
+  submitSuccess: boolean = true;
+  submitCompleted: boolean = false;
 
   constructor(
     private router: Router,
@@ -175,23 +182,39 @@ export class ReservedPhotoForm implements OnInit {
     }
   }
 
+  closeSubmitModal(): void {
+    this.isSubmitLoading = false;
+    this.submitCompleted = true;
+    setTimeout(() => {
+      this.isSubmitModalOpen = false;
+      this.router.navigateByUrl(`/reserved/projects/${this.photo.projectId}/photos`);
+    }, 5000);
+  }
+  
   async submit(): Promise<void> {
+    this.isSubmitModalOpen = true;
+    this.isSubmitLoading = true;
     try {
       if (!this.editMode) {
+        this.submitLoadingMessage = 'Creazione di una nuova fotografia in corso';
         await this.uploadPhotoImage();
         await this.createNewPhoto();
+        this.submitLoadingMessage = 'Creazione riuscita!';
       } else {
-        console.log('qui');
+        this.submitLoadingMessage = 'Modifica di una fotografia in corso';
         if (this.photoImageChanged) {
           await this.deletePhotoImage();
           await this.uploadPhotoImage();
         }
         await this.editPhoto();
+        this.submitLoadingMessage = 'Modifica riuscita!'
       }
     } catch (error) {
+      this.submitLoadingMessage = 'Operazione non riuscita :(';
+      this.submitSuccess = false;
       console.log(error);
     } finally {
-      this.router.navigateByUrl(`/reserved/projects/${this.photo.projectId}/photos`);
+      this.closeSubmitModal();
     }
   }
 
