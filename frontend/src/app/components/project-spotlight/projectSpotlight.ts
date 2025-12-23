@@ -7,6 +7,7 @@ import { Photo, Project } from '../../model/model';
 import { MapService } from '../../services/map-service/map-service';
 import { PhotoSpotlight } from '../photo-spotlight/photo-spotlight';
 import { emptyProject } from '../../utils/blank-objects';
+import { orderPhotoArray } from '../../utils/utils';
 
 @Component({
   selector: 'app-project',
@@ -50,6 +51,7 @@ export class ProjectSpotlight implements OnInit{
     try {
       const response = await this.supabase.getPhotosByProjectId(this.projectId);
       this.photos = this.mapSerivice.mapPhoto(response.data);
+      this.photos = orderPhotoArray(this.photos);
     } catch (error) {
       console.log(error);
     }
