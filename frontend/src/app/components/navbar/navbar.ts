@@ -42,4 +42,8 @@ export class Navbar implements OnInit{
     this.router.navigateByUrl('/projects');
   }
 
+  goToLogin(): void {
+    this.router.navigateByUrl('/reserved');
+  }
+
 }
