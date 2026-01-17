@@ -14,6 +14,7 @@ export class MapService {
         title: project.title,
         description: project.description,
         coverImageUrl: project.cover_image_url,
+        order: project.order,
         createdAt: new Date(project.created_at),
         updatedAt: new Date(project.updated_at),
         photos: [], // da popolare se ci sono relazioni

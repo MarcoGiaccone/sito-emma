@@ -19,6 +19,7 @@ export const emptyProject: Project = {
     coverImageUrl: '',
     createdAt: new Date(0), // data minima come placeholder
     updatedAt: new Date(0),
+    order: undefined,
     photos: [] as Photo[],
     categories: [] as Category[]
 };

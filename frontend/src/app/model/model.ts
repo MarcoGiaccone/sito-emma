@@ -15,6 +15,7 @@ export interface Project {
   coverImageUrl: string;
   createdAt: Date;
   updatedAt: Date;
+  order?: number;
   photos: Photo[]; // relazione uno-a-molti con Photo
   categories?: Category[]; // opzionale
 }

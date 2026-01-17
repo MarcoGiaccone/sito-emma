@@ -6,6 +6,7 @@ import { blankPhoto } from '../../utils/blank-objects';
 import { Photo, Project } from '../../model/model';
 import { MapService } from '../../services/map-service/map-service';
 import { ProjectThumbnail } from '../project-thumbnail/project-thumbnail';
+import { orderProjectArray } from '../../utils/utils';
 
 @Component({
   selector: 'app-projects-home',
@@ -30,6 +31,7 @@ export class ProjectsHome implements OnInit {
     try {
       const response = await this.supabase.getProjects();
       this.projects = this.mapService.mapProject(response.data);
+      this.projects = orderProjectArray(this.projects);
     } catch (error) {
       console.log(error);
     }

@@ -16,7 +16,19 @@
                             id="titolo-progetto" 
                             name="titolo-progetto">
                     </div>
-                    <div class="col-8">
+                    <div class="col-4">
+                        <label for="ordine-progetto" class="form-label">Ordine</label>
+                        <input
+                        [(ngModel)]="project.order"
+                        type="number"
+                        class="form-control"
+                        id="ordine-progetto"
+                        name="ordine-progetto"
+                        min="0"
+                        max="999"
+                        >
+                    </div>
+                    <div class="col-4">
                         <label for="descrizione-progetto" class="form-label">Descrizione</label>
                         <textarea 
                             [(ngModel)]="project.description"
