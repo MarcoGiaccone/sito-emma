@@ -144,4 +144,71 @@ margin: 5px auto;
     margin-right: 20px;
 }
 
+/* Mobile (small screens) – fino a 600px:
+Questi sono i dispositivi mobili con schermi più piccoli, come smartphone.
+Tablet (medium screens) – tra 600px e 1024px:
+Tablet e alcune versioni di dispositivi con schermo più grande, come i tablet da 7" o 8" e alcuni smartphone con schermi più larghi.
+Desktop (large screens) – da 1024px in su:
+Questo punto di interruzione è per dispositivi desktop e laptop con schermi di dimensioni più grandi. */
+
+@media (min-width: 600px) {
+    body {
+        width: 100%;
+    }
+
+    .hero-section {
+        height: 60vh;
+        background-image: url(../../../../public/image00001.jpg);
+        background-size: cover;      /* Copre l’intera area */
+        background-repeat: no-repeat; /* Evita ripetizioni */
+    }
+
+    .hero-text-container {
+        display: inline;
+        position: relative;
+        top: 5rem;
+    }
+
+    .hero-text {
+        font-size: 3rem;
+        margin-left: 7rem;
+    }
+
+    .hero-highlighted {
+        font-size: 3rem;
+    }
+
+    .hero-section-bars {
+        font-size: 3rem;
+        font-weight: 400;
+        position: relative;
+        top: -40px;
+    }
+
+    .section-1-text, .section-3-text {
+        margin-left: 5rem;
+    }
+
+    .section-2-side {
+        /* 5rem 1rem = 16px*/ 
+        padding-right: 140px;
+    }
+
+    .section-2-main-text {
+        font-size: 0.9rem;
+    }
+
+    .section-3-text-2, .section-4-text {
+        margin-right: 5rem;
+    }
+
+    .section-3-image {
+        width: 60vw;
+    }
+
+    .section-4-image {
+        margin-left: 5rem;
+    }
+}
+
 

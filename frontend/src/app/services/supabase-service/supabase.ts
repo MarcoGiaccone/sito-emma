@@ -74,6 +74,7 @@ export class Supabase {
           description: project.description,
           user_id: 10,
           cover_image_url: project.coverImageUrl,
+          order: project.order,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
           place: 'Butty'
@@ -97,7 +98,8 @@ export class Supabase {
         updated_at: new Date().toISOString(),
         title: project.title,
         description: project.description,
-        cover_image_url: project.coverImageUrl
+        cover_image_url: project.coverImageUrl,
+        order: project.order
       })
       .eq('id', `${project.id}`)
       .select()

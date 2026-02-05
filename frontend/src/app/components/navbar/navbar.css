@@ -66,3 +66,25 @@ a {
     align-items: center;
     height: 80vh;
 }
+
+@media (min-width: 600px) {
+    nav {
+        height: 50px;
+    }
+
+    .logo {
+        font-size: 1.5rem;
+    }
+
+    .navbar-icon {
+        width: 1.6rem;
+    }
+
+    .menu-cross {
+        font-size: 1.8rem;
+    }
+
+    .menu-list-item {
+        font-size: 1.5rem;
+    }
+} 

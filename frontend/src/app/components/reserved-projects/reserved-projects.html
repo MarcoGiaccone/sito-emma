@@ -14,6 +14,7 @@
                                 <th class="px-3">Titolo</th>
                                 <th class="px-3">Creato il</th>
                                 <th class="px-3">Descrizione</th>
+                                <th class="px-3">Ordine</th>
                                 <th class="px-3">Azioni</th>
                             </tr>
                         </thead>
@@ -34,6 +35,7 @@
                                         <td class="p-3">{{ project.title }}</td>
                                         <td class="p-3">{{ project.createdAt | date:'dd/MM/yyyy' }}</td>
                                         <td class="p-3">{{ project.description }}</td>
+                                        <td class="px-3">{{ project.order }}</td>
                                         <td class="p-3">
                                             <i (click)="managePhotos(project)" class="action-icon fa-solid fa-image px-1"></i>
                                             <i (click)="editProject(project)" class="action-icon fa-solid fa-pen px-1"></i>

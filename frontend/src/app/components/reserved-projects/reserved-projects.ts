@@ -6,6 +6,7 @@ import { DatePipe, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { ModalWarning } from "../modal-warning/modal-warning";
 import { emptyProject } from '../../utils/blank-objects';
+import { orderProjectArray } from '../../utils/utils';
 
 
 @Component({
@@ -40,6 +41,7 @@ export class ReservedProjects implements OnInit {
       const response = await this.supabase.getProjects();
       if (response.status === 200) {
         this.projects = this.mapService.mapProject(response.data);
+        this.projects = orderProjectArray(this.projects);
       }
     } catch (error) {
       console.log(error);
